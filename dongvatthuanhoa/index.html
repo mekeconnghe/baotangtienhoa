@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bảo Tàng Tiến Hoá: Vật Nuôi & Gia Cầm</title>
+    
+    <meta property="og:title" content="Bộ Thẻ Bảo Tàng Tiến Hoá: Động Vật Thuần Hoá - Tiến Hoá Nhân Tạo" />
+    <meta property="og:description" content="Bộ thẻ giúp bé khám phá hành trình tiến hoá nhân tạo và thuần hóa của các loài động vật." />
+    <meta property="og:image" content="https://i.pinimg.com/736x/c5/0f/c8/c50fc8f7708aa9b0a0a542f130e79b16.jpg" />
+    <meta property="og:url" content="https://mekeconnghe.github.io/baotangtienhoa/dongvatthuanhoa/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .noselect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .progress-transition {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-amber-50 min-h-screen font-sans text-gray-800 flex flex-col items-center py-4 px-3 md:py-6 md:px-4">
+
+    <div class="text-center mb-4 w-full space-y-2">
+        <h1 class="text-xl md:text-3xl font-bold text-amber-800 flex items-center justify-center gap-2">
+            <i data-lucide="landmark" class="w-6 h-6 md:w-8 md:h-8"></i>
+            Bảo Tàng Tiến Hoá
+        </h1>
+        <div class="text-sm md:text-xl font-semibold text-amber-600 uppercase tracking-widest border-b-2 border-amber-200 inline-block pb-1">
+            Động vật thuần hoá - Tiến hoá nhân tạo
+        </div>
+        
+        <div class="pt-1">
+            <a href="https://zalo.me/g/hirmwg741" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-4 py-2 rounded-full text-xs md:text-sm font-bold shadow-md transition-all border-2 border-white ring-2 ring-pink-100">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                Tham Gia Cộng đồng Mẹ Kể Con Nghe
+            </a>
+        </div>
+    </div>
+
+    <div class="w-full max-w-lg perspective-1000 group flex-grow flex flex-col justify-center mb-4">
+        <div 
+            id="flashcard"
+            class="relative w-full bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer transition-all duration-300 transform active:scale-[0.99] border-b-4 border-amber-200 noselect"
+            onclick="handleCardClick()"
+        >
+            <div class="absolute inset-0 flex flex-col h-full relative">
+                
+                <div id="card-header" class="flex-none flex flex-col w-full px-3 pt-2 mb-0 bg-white">
+                    <div class="flex justify-between items-center mb-1">
+                        <div class="flex items-center gap-1 text-gray-400 font-bold text-[10px]">
+                            <i data-lucide="map" class="w-3 h-3 text-orange-400"></i>
+                            <span id="counter-text">1/15</span>
+                        </div>
+                        <span id="side-indicator" class="px-2 py-0.5 rounded bg-amber-50 text-amber-600 font-bold text-[10px] uppercase">
+                            Hình ảnh
+                        </span>
+                    </div>
+                    <div class="w-full h-0.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-orange-400 rounded-full progress-transition" style="width: 5%"></div>
+                    </div>
+                </div>
+
+                <div id="card-content" class="flex-grow flex flex-col items-center justify-center text-center w-full">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full max-w-lg flex gap-3 mb-4">
+        <button 
+            onclick="prevCard()"
+            class="flex-1 flex items-center justify-center gap-2 bg-white hover:bg-gray-50 active:bg-gray-100 text-gray-700 px-4 py-3 rounded-xl shadow-sm border border-gray-200 font-bold text-base md:text-lg transition-colors touch-manipulation"
+        >
+            <i data-lucide="chevron-left" class="w-5 h-5 md:w-6 md:h-6"></i> Trước
+        </button>
+        
+        <button 
+            id="btn-next"
+            onclick="nextCard()"
+            class="flex-1 flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white px-4 py-3 rounded-xl shadow-md shadow-amber-200 font-bold text-base md:text-lg transition-colors touch-manipulation"
+        >
+            Sau <i data-lucide="chevron-right" class="w-5 h-5 md:w-6 md:h-6"></i>
+        </button>
+    </div>
+
+    <script>
+        const dataSources = [
+            {
+                id: 121, name: "Cừu", image: "cuu.jpg",
+                facts: [
+                    "Tổ tiên hoang dã: Cừu nhà ngày nay tiến hóa từ loài cừu hoang Mouflon sống ở vùng núi Châu Âu và Châu Á.",
+                    "Bộ lông thay đổi: Qua quá trình thuần hóa, con người đã chọn lọc từ loài lông ngắn thành loài có bộ lông len dày và dài vô tận.",
+                    "Đồng tử chữ nhật: Mắt cừu có đồng tử hình chữ nhật nằm ngang, giúp chúng nhìn bao quát 270 độ để phát hiện kẻ săn mồi.",
+                    "Trí nhớ tốt: Cừu có khả năng ghi nhớ khuôn mặt của 50 con cừu khác hoặc con người trong nhiều năm.",
+                    "Sống bầy đàn: Chúng có bản năng bầy đàn cực mạnh, nếu bị tách riêng, cừu sẽ vô cùng hoảng loạn và căng thẳng."
+                ]
+            },
+            {
+                id: 122, name: "Dê", image: "de.jpg",
+                facts: [
+                    "Bậc thầy leo núi: Từ dê núi hoang dã, chúng giữ lại khả năng giữ thăng bằng tuyệt đỉnh trên các vách đá cheo leo.",
+                    "Tiến hóa đa dạng: Con người đã lai tạo ra hàng trăm giống dê khác nhau chuyên để lấy sữa, lấy thịt hoặc lấy lông.",
+                    "Ăn tạp hay tò mò?: Dê không thực sự ăn giày dép hay rác, chúng chỉ dùng miệng nếm thử mọi thứ để kiểm tra xem có ăn được không.",
+                    "Không có hàm trên: Dê không có răng ở hàm trên phía trước, thay vào đó là một tấm đệm cứng để nghiền cỏ.",
+                    "Râu dê: Cả dê đực và dê cái của nhiều giống dê đều có thể mọc râu."
+                ]
+            },
+            {
+                id: 123, name: "Lạc đà không bướu (Llama)", image: "llama.jpg",
+                facts: [
+                    "Nguồn gốc Andes: Được thuần hóa từ loài Guanaco hoang dã để phục vụ cư dân vùng núi cao Andes.",
+                    "Thích nghi độ cao: Máu của chúng chứa lượng hồng cầu rất cao, giúp hấp thụ oxy tốt trong không khí loãng trên núi cao.",
+                    "Vũ khí nước bọt: Khi tức giận hoặc cảm thấy bị đe dọa, Llama sẽ phun một hỗn hợp nước bọt và dịch dạ dày vào đối thủ.",
+                    "Vệ sĩ cừu: Llama rất dũng cảm và thường được nuôi chung với bầy cừu để xua đuổi chó sói hay cáo.",
+                    "Thồ hàng siêu hạng: Chúng có thể thồ nặng 30% trọng lượng cơ thể và đi bộ hàng chục km mỗi ngày."
+                ]
+            },
+            {
+                id: 124, name: "Lừa", image: "lua.jpg",
+                facts: [
+                    "Tổ tiên Châu Phi: Là hậu duệ của loài lừa hoang châu Phi, tiến hóa để sinh tồn ở môi trường sa mạc khắc nghiệt.",
+                    "Đôi tai ngoại cỡ: Tai to giúp lừa tản nhiệt cho cơ thể mát mẻ và nghe được tiếng đồng loại từ cách xa 3km.",
+                    "Sự bướng bỉnh: Lừa không 'ngu' hay bướng vô cớ, chúng chỉ từ chối di chuyển khi cảm thấy nguy hiểm (bản năng tự vệ cao).",
+                    "Sức khỏe bền bỉ: So với kích thước cơ thể, lừa khỏe hơn ngựa và có thể chịu được tải trọng lớn trên đường gập ghềnh.",
+                    "Trí nhớ đường đi: Lừa có khả năng ghi nhớ đường đi rất tốt và thường dẫn đường cho cả đàn."
+                ]
+            },
+            {
+                id: 125, name: "Gà Tây", image: "ga-tay.jpg",
+                facts: [
+                    "Biểu tượng Bắc Mỹ: Từ loài chim hoang dã trong rừng Bắc Mỹ, chúng đã trở thành món ăn truyền thống quan trọng.",
+                    "Đổi màu da đầu: Da đầu và cổ của gà tây có thể chuyển từ đỏ, trắng sang xanh dương tùy thuộc vào cảm xúc của chúng.",
+                    "Kích thước khổng lồ: Gà tây nuôi có ức quá lớn để bay, trong khi gà tây hoang dã vẫn có thể bay lên cây để ngủ.",
+                    "Tốc độ đáng nể: Dù trông phục phịch, gà tây hoang dã có thể chạy với tốc độ lên tới 40km/h.",
+                    "Benjamin Franklin: Ông từng đề xuất chọn Gà Tây làm quốc điểu của Mỹ thay vì Đại Bàng đầu trắng vì tính cách dũng cảm."
+                ]
+            },
+            {
+                id: 126, name: "Tằm", image: "con-tam.jpg",
+                facts: [
+                    "Phụ thuộc hoàn toàn: Tiến hóa từ ngài hoang dã, tằm nuôi ngày nay đã mất khả năng bay và không thể sống thiếu con người.",
+                    "Cỗ máy nhả tơ: Một con tằm nhỏ bé có thể nhả ra sợi tơ dài tới 900 mét liên tục không đứt.",
+                    "Lớn nhanh như thổi: Từ khi nở đến khi nhả tơ, trọng lượng cơ thể tằm tăng lên gấp 10.000 lần.",
+                    "Món ăn kén chọn: Tằm chỉ ăn lá dâu tằm tươi, nếu lá héo hoặc có hóa chất chúng sẽ không ăn.",
+                    "Vòng đời biến thái: Trứng nở ra sâu (tằm), tằm nhả tơ đóng kén thành nhộng, nhộng hóa thành ngài đẻ trứng."
+                ]
+            },
+            {
+                id: 127, name: "Cá chọi (Betta)", image: "ca-choi.jpg",
+                facts: [
+                    "Từ ruộng lúa: Tổ tiên chúng là loài cá nhỏ màu xỉn sống ở các ruộng lúa và vũng nước tù đọng tại Đông Nam Á.",
+                    "Vây đuôi rực rỡ: Qua lai tạo, vây của chúng phát triển dài thướt tha với đủ màu sắc, khác hẳn tổ tiên hoang dã.",
+                    "Cơ quan mê lộ: Betta có cơ quan hô hấp đặc biệt (Mê lộ) cho phép chúng hớp không khí trực tiếp trên mặt nước.",
+                    "Bố đảm đang: Cá đực sẽ nhả bọt khí làm tổ, ấp trứng và chăm sóc cá con, sẵn sàng tấn công bất cứ ai lại gần.",
+                    "Tính hiếu chiến: Hai con cá đực không thể nuôi chung bể vì chúng sẽ đánh nhau để tranh giành lãnh thổ."
+                ]
+            },
+            {
+                id: 128, name: "Bồ câu đưa thư", image: "bo-cau.jpg",
+                facts: [
+                    "La bàn tự nhiên: Được chọn lọc từ bồ câu đá, chúng có khả năng cảm nhận từ trường Trái Đất để tìm đường về nhà.",
+                    "Sữa diều: Cả bồ câu bố và mẹ đều tiết ra một loại 'sữa' từ diều để mớm nuôi chim non.",
+                    "Bay siêu tốc: Bồ câu đưa thư có thể bay với tốc độ trung bình 80km/h và liên tục trong nhiều giờ.",
+                    "Nhận diện bản thân: Đây là một trong số ít loài vật có thể nhận ra hình ảnh phản chiếu của chính mình trong gương.",
+                    "Biểu tượng hòa bình: Do bản tính hiền lành và gắn bó (chung thủy một vợ một chồng), chúng trở thành biểu tượng toàn cầu."
+                ]
+            },
+            {
+                id: 129, name: "Chuột bạch", image: "chuot-bach.jpg",
+                facts: [
+                    "Biến đổi màu sắc: Là dòng đột biến bạch tạng của chuột cống hoang dã, được con người chọn lọc để dễ quan sát.",
+                    "Hy sinh cho khoa học: Hệ gen của chuột giống người tới 90%, giúp chúng trở thành mô hình nghiên cứu y học quan trọng nhất.",
+                    "Thông minh và sạch sẽ: Khác với định kiến, chuột bạch rất thông minh, giải mã mê cung giỏi và thường xuyên tự tắm rửa.",
+                    "Đồng cảm: Các nghiên cứu cho thấy chuột biết cứu đồng loại bị kẹt và chia sẻ thức ăn cho nhau.",
+                    "Răng mọc suốt đời: Răng cửa của chúng mọc liên tục, nên chúng phải gặm nhấm đồ vật để mài mòn răng."
+                ]
+            },
+            {
+                id: 130, name: "Thỏ nhà", image: "tho.jpg",
+                facts: [
+                    "Nguồn gốc Châu Âu: Tiến hóa từ thỏ hoang châu Âu, nay đã có hàng chục giống với màu lông và kích thước khác nhau.",
+                    "Đôi tai điều hòa: Tai thỏ chứa nhiều mạch máu, giúp chúng tỏa nhiệt làm mát cơ thể chứ không chỉ để nghe.",
+                    "Ăn phân của mình: Thỏ ăn lại loại phân mềm đặc biệt (cecotypes) của chính mình để hấp thu tối đa dinh dưỡng.",
+                    "Vũ điệu Binky: Khi thỏ vui sướng tột độ, chúng sẽ nhảy cẫng lên và vặn mình trên không trung, gọi là 'Binky'.",
+                    "Sinh sản thần tốc: Thỏ mang thai chỉ 30 ngày và có thể mang thai lại ngay sau khi sinh con."
+                ]
+            },
+            {
+                id: 131, name: "Vịt nhà", image: "vit.jpg",
+                facts: [
+                    "Hậu duệ Vịt Cổ Xanh: Hầu hết vịt nhà đều là con cháu của loài vịt Mallard (Vịt cổ xanh) hoang dã.",
+                    "Áo mưa tự nhiên: Tuyến phao câu tiết dầu giúp lông vịt không bao giờ bị thấm nước khi bơi.",
+                    "Ngủ mở một mắt: Vịt có khả năng ngủ bán cầu não – một nửa não ngủ, nửa kia thức và một mắt mở để cảnh giới.",
+                    "Ấn tượng đầu đời: Vịt con mới nở sẽ coi sinh vật đầu tiên nó nhìn thấy (thường là mẹ, hoặc con người) là mẹ của mình.",
+                    "Chân mái chèo: Bàn chân có màng giúp chúng bơi lội điêu luyện nhưng lại đi lạch bạch vụng về trên cạn."
+                ]
+            },
+            {
+                id: 132, name: "Ngỗng nhà", image: "ngong.jpg",
+                facts: [
+                    "Tổ tiên Ngỗng Xám: Được thuần hóa từ ngỗng xám hoang dã từ hàng ngàn năm trước để lấy thịt, trứng và lông.",
+                    "Trông nhà giỏi hơn chó: Ngỗng có thính giác tốt, tiếng kêu to và rất hung dữ với người lạ xâm nhập lãnh thổ.",
+                    "Chung thủy sắt son: Ngỗng thường kết đôi trọn đời và sẽ rất đau buồn nếu bạn đời của chúng mất đi.",
+                    "Răng trên lưỡi: Ngoài mỏ sắc, lưỡi ngỗng cũng có gai nhọn như răng cưa để cắt cỏ và giữ chặt thức ăn trơn trượt.",
+                    "Đội hình chữ V: Dù là ngỗng nhà, chúng vẫn giữ bản năng bay theo đội hình chữ V của tổ tiên di cư."
+                ]
+            },
+            {
+                id: 133, name: "Bò Yak", image: "bo-yak.jpg",
+                facts: [
+                    "Chúa tể cao nguyên: Tiến hóa đặc biệt để sống ở độ cao cực lớn trên cao nguyên Tây Tạng lạnh giá.",
+                    "Phổi và tim khổng lồ: Để lấy đủ oxy trong không khí loãng, tim và phổi của bò Yak to hơn nhiều so với bò thường.",
+                    "Áo khoác 2 lớp: Chúng có lớp lông ngoài dài quét đất và lớp lông tơ bên trong dày ấm để chịu được nhiệt độ -40 độ C.",
+                    "Phân làm chất đốt: Ở nơi không có cây cối, phân bò Yak khô là nguồn nhiên liệu quý giá duy nhất để người dân đun nấu.",
+                    "Leo dốc điệu nghệ: Móng guốc chắc chắn giúp chúng thồ hàng đi băng băng trên các sườn núi dốc đứng đầy tuyết."
+                ]
+            },
+            {
+                id: 134, name: "Trâu nước", image: "trau.jpg",
+                facts: [
+                    "Bạn của nhà nông: Từ trâu rừng hoang dã hung dữ, chúng được thuần hóa thành trợ thủ đắc lực nhất cho nền văn minh lúa nước.",
+                    "Sừng hình cung: Cặp sừng lớn không chỉ là vũ khí mà còn giúp chúng húc đất, dọn cỏ trong quá trình lao động.",
+                    "Đầm mình trong bùn: Do tuyến mồ hôi kém phát triển, trâu phải ngâm mình trong bùn nước để làm mát cơ thể.",
+                    "Bơi lội giỏi: Dù thân hình nặng nề, trâu nước bơi rất giỏi và có thể băng qua sông rộng.",
+                    "Sữa trâu: Sữa trâu có hàm lượng béo và đạm cao hơn sữa bò, là nguyên liệu chính làm phô mai Mozzarella nổi tiếng."
+                ]
+            },
+            {
+                id: 135, name: "Ong mật", image: "ong-mat.jpg",
+                facts: [
+                    "Ngôn ngữ khiêu vũ: Ong thợ báo tin về nguồn hoa cho đồng loại bằng cách bay theo hình số 8 (vũ điệu lắc bụng).",
+                    "Kiến trúc sư đại tài: Tổ ong được xây bằng sáp với các ngăn hình lục giác đều tăm tắp để tối ưu không gian.",
+                    "Mật ong bất tử: Mật ong là loại thực phẩm duy nhất trong tự nhiên không bao giờ bị hỏng nếu bảo quản kín.",
+                    "Vai trò thụ phấn: Ong mật đóng vai trò quan trọng nhất trong việc thụ phấn giúp cây cối ra hoa kết trái.",
+                    "Nữ hoàng quyền lực: Một tổ chỉ có 1 ong chúa duy nhất, nó có thể đẻ tới 2.000 quả trứng mỗi ngày để duy trì nòi giống."
+                ]
+            }
+        ];
+
+        // --- State ---
+        let currentIndex = 0;
+        let isFlipped = false;
+        let isEndScreen = false;
+
+        // --- DOM Elements ---
+        const contentEl = document.getElementById('card-content');
+        const cardHeader = document.getElementById('card-header');
+        const counterText = document.getElementById('counter-text');
+        const progressBar = document.getElementById('progress-bar');
+        const indicatorEl = document.getElementById('side-indicator');
+        const btnNext = document.getElementById('btn-next');
+
+        // --- Functions ---
+
+        function renderCard() {
+            if (isEndScreen) {
+                renderEndScreen();
+                return;
+            }
+
+            // Reset UI states
+            cardHeader.style.display = 'flex';
+            
+            const currentCard = dataSources[currentIndex];
+            
+            // Cập nhật Thanh tiến trình & Số đếm
+            const progressPercent = ((currentIndex + 1) / dataSources.length) * 100;
+            counterText.textContent = `${currentIndex + 1}/${dataSources.length}`;
+            progressBar.style.width = `${progressPercent}%`;
+
+            
+            if (isFlipped) {
+                indicatorEl.textContent = 'Thông tin';
+                indicatorEl.className = 'px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px] uppercase';
+            } else {
+                indicatorEl.textContent = 'Ảnh';
+                indicatorEl.className = 'px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-[10px] uppercase';
+            }
+
+            // Nút Next logic
+            btnNext.innerHTML = currentIndex === dataSources.length - 1 ? 'Hoàn thành <i data-lucide="check" class="w-5 h-5"></i>' : 'Sau <i data-lucide="chevron-right" class="w-5 h-5"></i>';
+
+            let html = '';
+
+            if (!isFlipped) {
+                // MẶT TRƯỚC:
+                html += `<div class="animate-fade-in w-full flex flex-col">`;
+                
+                // PHẦN ẢNH:
+                html += `
+                    <div class="relative w-full bg-white">
+                         <img 
+                            src="${currentCard.image}" 
+                            alt="${currentCard.name}" 
+                            class="w-full h-auto block"
+                            onerror="this.src='https://placehold.co/600x400/orange/white?text=${encodeURIComponent(currentCard.name)}';"
+                         >
+                    </div>
+                `;
+                
+                // NÚT LẬT:
+                html += `
+                    <div class="w-full flex justify-center py-3 bg-white border-t border-gray-100">
+                        <div class="inline-flex items-center gap-1.5 bg-white border border-orange-200 text-orange-600 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm animate-pulse">
+                            <i data-lucide="rotate-cw" class="w-3 h-3 text-orange-500"></i>
+                            Lật mặt sau để xem 5 sự thật thú vị
+                        </div>
+                    </div>
+                `;
+                html += `</div>`;
+            } else {
+                // MẶT SAU
+                html += `<div class="animate-fade-in w-full h-full flex flex-col px-4 pb-6 py-4">`;
+                
+                html += `<h3 class="flex-none text-xl font-bold text-amber-700 mb-3 uppercase border-b border-amber-200 pb-2 w-full text-center">${currentCard.name}</h3>`;
+                
+                html += `<div class="flex-grow flex flex-col gap-2 w-full">`;
+                
+                currentCard.facts.forEach((fact, index) => {
+                    html += `
+                        <div class="flex items-start gap-3 bg-amber-50 p-3 rounded-lg border border-amber-100 shadow-sm items-center">
+                            <span class="flex-shrink-0 bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shadow-sm">${index + 1}</span>
+                            <span class="text-gray-700 text-sm leading-snug font-medium text-justify">${fact}</span>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`; // End List Container
+                html += `</div>`; // End Main Container
+            }
+
+            contentEl.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function renderEndScreen() {
+            cardHeader.style.display = 'none';
+            btnNext.innerHTML = 'Hết bài';
+
+            let html = `
+                <div class="animate-fade-in flex flex-col items-center justify-center h-full text-center space-y-6 px-4 py-8">
+                    
+                    <div class="bg-gradient-to-br from-yellow-100 to-amber-200 p-6 rounded-full shadow-lg shadow-yellow-200">
+                        <i data-lucide="crown" class="w-20 h-20 text-yellow-600 fill-yellow-600"></i>
+                    </div>
+
+                    <div class="px-2">
+                        <h2 class="text-2xl md:text-3xl font-bold text-amber-700 mb-3">Bé Giỏi Quá!</h2>
+                        <p class="text-gray-600 text-base md:text-lg leading-relaxed">
+                            Chúc mừng <b>"Bé"</b> đã hoàn thành hành trình khám phá ${dataSources.length} loài động vật thuần hoá - tiến hoá nhân tạo!
+                        </p>
+                    </div>
+                    
+                    <a href="https://catalog.zalo.me/?cid=Cj7DJZwIc0rDhRz0DP6M2ZogmrT3w-GVCQNEIK2Gdc0fjSuv98Jh5G" 
+                       target="_blank"
+                       class="flex items-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-6 py-4 rounded-xl font-bold text-lg shadow-lg shadow-pink-200 transition-all hover:scale-105 transform border-2 border-white ring-2 ring-pink-100 mt-2">
+                        <i data-lucide="gift" class="w-6 h-6"></i>
+                        Xem tốt sản phẩm cho Mẹ & Bé 
+                    </a>
+                    
+                    <button 
+                        onclick="resetApp()"
+                        class="flex items-center gap-2 text-amber-600 hover:text-amber-800 font-semibold text-sm mt-4 bg-amber-50 px-5 py-2 rounded-full transition-colors border border-amber-100">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        Khám phá lại từ đầu
+                    </button>
+                </div>
+            `;
+            contentEl.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function handleCardClick() {
+            if (isEndScreen) return;
+            flipCard();
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            renderCard();
+        }
+
+        function nextCard() {
+            event.stopPropagation();
+            if (isEndScreen) return;
+
+            if (currentIndex < dataSources.length - 1) {
+                currentIndex++;
+                isFlipped = false;
+                renderCard();
+            } else {
+                isEndScreen = true;
+                isFlipped = false;
+                renderCard();
+            }
+        }
+
+        function prevCard() {
+            event.stopPropagation();
+            if (isEndScreen) {
+                isEndScreen = false;
+                currentIndex = dataSources.length - 1;
+                renderCard();
+                return;
+            }
+
+            if (currentIndex > 0) {
+                isFlipped = false;
+                currentIndex--;
+                renderCard();
+            }
+        }
+
+        function resetApp() {
+            event.stopPropagation();
+            currentIndex = 0;
+            isFlipped = false;
+            isEndScreen = false;
+            renderCard();
+        }
+
+        // --- Init ---
+        lucide.createIcons();
+        renderCard();
+
+    </script>
+</body>
+</html>
