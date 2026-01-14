@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bảo Tàng Tiến Hoá: Thế Giới Động Vật Trên Cạn</title>
+    
+    <meta property="og:title" content="Bộ Thẻ Bảo Tàng Tiến Hoá: Động Vật Ăn Thịt & Thú Móng Guốc" />
+    <meta property="og:description" content="Bộ thẻ giúp bé khám phá hành trình tiến hoá kỳ diệu của Động Vật ăn thịt & thú móng guốc." />
+    <meta property="og:image" content="https://i.pinimg.com/736x/4f/a5/47/4fa5471a39c5710db58679fdb51ac60d.jpg" />
+    <meta property="og:url" content="https://mekeconnghe.github.io/baotangtienhoa/dongvatanthit/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .noselect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .progress-transition {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-amber-50 min-h-screen font-sans text-gray-800 flex flex-col items-center py-4 px-3 md:py-6 md:px-4">
+
+    <div class="text-center mb-4 w-full space-y-2">
+        <h1 class="text-xl md:text-3xl font-bold text-amber-800 flex items-center justify-center gap-2">
+            <i data-lucide="landmark" class="w-6 h-6 md:w-8 md:h-8"></i>
+            Bảo Tàng Tiến Hoá
+        </h1>
+        <div class="text-sm md:text-xl font-semibold text-amber-600 uppercase tracking-widest border-b-2 border-amber-200 inline-block pb-1">
+            Động Vật Ăn Thịt & Thú Móng Guốc
+        </div>
+        
+        <div class="pt-1">
+            <a href="https://zalo.me/g/hirmwg741" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-4 py-2 rounded-full text-xs md:text-sm font-bold shadow-md transition-all border-2 border-white ring-2 ring-pink-100">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                Tham Gia Cộng đồng Mẹ Kể Con Nghe
+            </a>
+        </div>
+    </div>
+
+    <div class="w-full max-w-lg perspective-1000 group flex-grow flex flex-col justify-center mb-4">
+        <div 
+            id="flashcard"
+            class="relative w-full bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer transition-all duration-300 transform active:scale-[0.99] border-b-4 border-amber-200 noselect"
+            onclick="handleCardClick()"
+        >
+            <div class="absolute inset-0 flex flex-col h-full relative">
+                
+                <div id="card-header" class="flex-none flex flex-col w-full px-3 pt-2 mb-0 bg-white">
+                    <div class="flex justify-between items-center mb-1">
+                        <div class="flex items-center gap-1 text-gray-400 font-bold text-[10px]">
+                            <i data-lucide="map" class="w-3 h-3 text-orange-400"></i>
+                            <span id="counter-text">1/20</span>
+                        </div>
+                        <span id="side-indicator" class="px-2 py-0.5 rounded bg-amber-50 text-amber-600 font-bold text-[10px] uppercase">
+                            Hình ảnh
+                        </span>
+                    </div>
+                    <div class="w-full h-0.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-orange-400 rounded-full progress-transition" style="width: 5%"></div>
+                    </div>
+                </div>
+
+                <div id="card-content" class="flex-grow flex flex-col items-center justify-center text-center w-full">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full max-w-lg flex gap-3 mb-4">
+        <button 
+            onclick="prevCard()"
+            class="flex-1 flex items-center justify-center gap-2 bg-white hover:bg-gray-50 active:bg-gray-100 text-gray-700 px-4 py-3 rounded-xl shadow-sm border border-gray-200 font-bold text-base md:text-lg transition-colors touch-manipulation"
+        >
+            <i data-lucide="chevron-left" class="w-5 h-5 md:w-6 md:h-6"></i> Trước
+        </button>
+        
+        <button 
+            id="btn-next"
+            onclick="nextCard()"
+            class="flex-1 flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white px-4 py-3 rounded-xl shadow-md shadow-amber-200 font-bold text-base md:text-lg transition-colors touch-manipulation"
+        >
+            Sau <i data-lucide="chevron-right" class="w-5 h-5 md:w-6 md:h-6"></i>
+        </button>
+    </div>
+
+    <script>
+        const dataSources = [
+            {
+                id: 101, name: "Báo săn (Cheetah)", image: "bao-san.jpg",
+                facts: [
+                    "Tốc độ ánh sáng: Tiến hóa để trở thành loài chạy nhanh nhất mặt đất với cấu trúc xương nhẹ và cột sống linh hoạt.",
+                    "Giày đinh tự nhiên: Khác với các loài mèo khác, móng vuốt của báo săn không thể thụt vào trong, giúp bám chặt mặt đất khi chạy.",
+                    "Đuôi bánh lái: Chiếc đuôi dài và nặng hoạt động như một bánh lái giúp chúng rẽ ngoặt hướng cực nhanh khi đang đuổi mồi.",
+                    "Kính râm: Hai vệt đen kéo dài từ mắt xuống miệng giúp hấp thụ ánh sáng mặt trời, chống chói mắt khi săn mồi ban trưa.",
+                    "Không biết gầm: Báo săn không thể gầm như sư tử, chúng chỉ có thể kêu 'chiếp chiếp' giống như tiếng chim."
+                ]
+            },
+            {
+                id: 102, name: "Báo đốm (Jaguar)", image: "bao-dom.jpg",
+                facts: [
+                    "Cú cắn hủy diệt: Phát triển lực hàm mạnh nhất trong họ nhà mèo, có thể cắn xuyên thủng cả mai rùa và sọ cá sấu.",
+                    "Thợ lặn cừ khôi: Không sợ nước như mèo nhà, báo đốm bơi rất giỏi và thường xuyên săn cá, cá sấu dưới sông.",
+                    "Hoa văn đặc biệt: Bạn có thể phân biệt nó với báo hoa mai nhờ các chấm nhỏ nằm bên trong các vòng tròn đen trên lông.",
+                    "Cái tên quyền lực: Tên 'Jaguar' bắt nguồn từ tiếng bản địa có nghĩa là 'Kẻ giết mồi chỉ bằng một cú nhảy'.",
+                    "Kẻ săn mồi phục kích: Thay vì đuổi bắt đường dài, chúng thích ẩn nấp và tung ra cú vồ bất ngờ từ trên cây hoặc bụi rậm."
+                ]
+            },
+            {
+                id: 103, name: "Linh cẩu đốm", image: "linh-cau.jpg",
+                facts: [
+                    "Sức mạnh hủy diệt: Tiến hóa bộ hàm và răng cực khỏe có thể nghiền nát xương ống của động vật lớn để hút tủy.",
+                    "Nữ quyền: Xã hội linh cẩu là chế độ mẫu hệ, con cái có kích thước lớn hơn, hung dữ hơn và lãnh đạo cả đàn.",
+                    "Tiếng cười man dợ: Tiếng kêu của chúng nghe giống như tiếng người cười điên loạn, dùng để báo hiệu sự phấn khích hoặc đe dọa.",
+                    "Dạ dày thép: Hệ tiêu hóa của chúng cực mạnh, có thể tiêu hóa được cả da, răng và sừng của con mồi.",
+                    "Thông minh vượt trội: Các bài kiểm tra cho thấy linh cẩu đốm có khả năng giải quyết vấn đề và hợp tác nhóm tốt hơn cả tinh tinh."
+                ]
+            },
+            {
+                id: 104, name: "Gấu Bắc Cực", image: "gau-bac-cuc.jpg",
+                facts: [
+                    "Thích nghi băng giá: Tách ra từ gấu nâu, tiến hóa bộ lông trắng để ngụy trang và lớp mỡ dày 10cm để giữ ấm.",
+                    "Da màu đen: Dưới lớp lông trắng muốt thực chất là làn da màu đen giúp hấp thụ nhiệt từ ánh mặt trời tốt nhất.",
+                    "Bàn chân mái chèo: Bàn chân to và có màng giúp chúng bơi lội điêu luyện liên tục hàng trăm km trên biển.",
+                    "Siêu khứu giác: Có thể ngửi thấy mùi hải cẩu từ cách xa 30km hoặc bị chôn vùi dưới lớp tuyết dày 1 mét.",
+                    "Không uống nước: Chúng lấy nước chủ yếu từ phản ứng hóa học khi phân giải mỡ của con mồi, vì nước ngọt ở Bắc Cực đều đóng băng."
+                ]
+            },
+            {
+                id: 105, name: "Gấu Trúc (Panda)", image: "gau-truc.jpg",
+                facts: [
+                    "Ngón tay cái giả: Từ động vật ăn thịt tiến hóa thành loài chuyên ăn tre nhờ xương cổ tay biến đổi thành một 'ngón tay cái' để cầm nắm.",
+                    "Ăn không ngừng: Vì tre rất ít dinh dưỡng nên gấu trúc phải dành tới 12-16 tiếng mỗi ngày chỉ để ăn.",
+                    "Ruột ăn thịt: Dù ăn thực vật nhưng hệ tiêu hóa của chúng vẫn là của loài ăn thịt, nên khả năng hấp thụ rất kém.",
+                    "Con non tí hon: Gấu trúc con khi sinh ra chỉ nặng bằng 1/900 trọng lượng mẹ, bé như một thỏi sô-cô-la.",
+                    "Ngụy trang kép: Màu trắng giúp chúng ẩn mình trong tuyết mùa đông, còn màu đen giúp hòa lẫn vào bóng râm trong rừng tre."
+                ]
+            },
+            {
+                id: 106, name: "Ngựa vằn", image: "ngua-van.jpg",
+                facts: [
+                    "Ảo ảnh quang học: Sự tiến hóa của các sọc vằn giúp đánh lừa thị giác kẻ thù và xua đuổi các loài ruồi trâu hút máu.",
+                    "Vân tay độc nhất: Không có hai con ngựa vằn nào có sọc giống hệt nhau, chúng dùng sọc để nhận ra nhau trong đàn.",
+                    "Ngủ đứng: Ngựa vằn thường ngủ đứng để cảnh giác và có thể bỏ chạy ngay lập tức nếu bị tấn công.",
+                    "Chạy zíc-zắc: Khi bị truy đuổi, chúng không chạy thẳng mà chạy theo đường zíc-zắc để kẻ thù khó tóm được.",
+                    "Da đen hay trắng?: Thực chất ngựa vằn là loài có làn da màu đen và được bao phủ bởi các sọc lông trắng."
+                ]
+            },
+            {
+                id: 107, name: "Linh dương đầu bò", image: "linh-duong-dau-bo.jpg",
+                facts: [
+                    "Cuộc di cư vĩ đại: Tiến hóa để thực hiện những cuộc di cư khổng lồ hàng năm với hàng triệu cá thể để tìm nguồn nước và cỏ.",
+                    "Trí tuệ bầy đàn: Chúng sở hữu 'trí thông minh bầy đàn', giúp cả triệu con di chuyển đồng bộ như một dòng sông sống.",
+                    "Sinh ra để chạy: Con non có thể đứng dậy và chạy theo mẹ chỉ vài phút sau khi sinh để tránh kẻ săn mồi.",
+                    "Vượt sông tử thần: Thử thách lớn nhất của chúng là vượt qua sông Mara, nơi đầy rẫy cá sấu đói đang chờ sẵn.",
+                    "Kẻ ồn ào: Chúng liên tục phát ra tiếng kêu ộp oạp để giữ liên lạc với nhau trong đám bụi mù mịt khi di chuyển."
+                ]
+            },
+            {
+                id: 108, name: "Lợn vòi (Tapir)", image: "lon-voi.jpg",
+                facts: [
+                    "Hóa thạch sống: Là loài vật cổ xưa, hình dáng của chúng gần như không thay đổi trong hàng chục triệu năm qua.",
+                    "Chiếc vòi đa năng: Mũi và môi trên kéo dài thành một chiếc vòi ngắn linh hoạt để tuốt lá cây và hít thở khi lặn.",
+                    "Kẻ làm vườn rừng: Phân của lợn vòi chứa nhiều hạt cây chưa tiêu hóa, giúp phát tán và trồng rừng khi chúng di chuyển.",
+                    "Con non dưa hấu: Lợn vòi con có bộ lông sọc đốm trông như quả dưa hấu để ngụy trang dưới tán rừng lốm đốm nắng.",
+                    "Bơi lặn giỏi: Khi gặp nguy hiểm, chúng thường lao xuống nước và lặn một hơi dài hoặc dùng vòi làm ống thở."
+                ]
+            },
+            {
+                id: 109, name: "Tê giác trắng", image: "te-giac-trang.jpg",
+                facts: [
+                    "Máy cắt cỏ: Tiến hóa chiếc môi rộng và phẳng (khác môi nhọn của tê giác đen) để gặm cỏ sát đất hiệu quả nhất.",
+                    "Sừng là tóc: Sừng tê giác không phải xương mà được cấu tạo từ Keratin, giống hệt chất liệu của tóc và móng tay người.",
+                    "Da dày nhưng nhạy: Da chúng rất dày như áo giáp nhưng lại dễ bị cháy nắng và côn trùng cắn, nên chúng hay tắm bùn để bảo vệ.",
+                    "Khổng lồ hiền lành: Là loài tê giác lớn nhất thế giới, nặng tới hơn 2 tấn nhưng chỉ ăn cỏ và khá hiền lành.",
+                    "Thị lực kém: Mắt chúng nhìn rất kém, chủ yếu dựa vào thính giác và khứu giác cực nhạy để phát hiện nguy hiểm."
+                ]
+            },
+            {
+                id: 110, name: "Hươu xạ", image: "huou-xa.jpg",
+                facts: [
+                    "Ma cà rồng ăn cỏ: Là loài hươu nguyên thủy, con đực vẫn giữ lại cặp răng nanh dài sắc nhọn thay vì tiến hóa gạc trên đầu.",
+                    "Tuyến xạ hương: Con đực có một túi xạ hương dưới bụng tỏa mùi thơm rất mạnh để thu hút bạn tình (và bị con người săn lùng).",
+                    "Nhảy như Kangaroo: Chân sau dài và khỏe hơn chân trước giúp chúng di chuyển bằng những cú nhảy lò cò đặc trưng.",
+                    "Không có gạc: Khác với hươu nai thông thường, hươu xạ hoàn toàn không có sừng (gạc) dù là con đực hay cái.",
+                    "Sống đơn độc: Chúng là loài động vật nhút nhát, sống đơn độc và hoạt động chủ yếu vào ban đêm hoặc rạng sáng."
+                ]
+            },
+            {
+                id: 111, name: "Lợn rừng", image: "lon-rung.jpg",
+                facts: [
+                    "Tổ tiên lợn nhà: Là loài tổ tiên hoang dã của tất cả các giống lợn nuôi ngày nay, nhưng hung dữ và mạnh mẽ hơn nhiều.",
+                    "Vũ khí tự mài: Răng nanh hàm dưới mọc dài và liên tục cọ vào răng hàm trên để tự mài sắc như dao.",
+                    "Thông minh xuất chúng: Lợn rừng rất thông minh, có trí nhớ tốt và khả năng học hỏi nhanh không kém gì loài chó.",
+                    "Xe tăng bọc thép: Lớp da ở vai con đực rất dày và cứng, hoạt động như tấm khiên bảo vệ trong các cuộc chiến.",
+                    "Tốc độ bất ngờ: Trông cục mịch nhưng lợn rừng có thể chạy với tốc độ 40km/h, nhanh hơn cả vận động viên điền kinh."
+                ]
+            },
+            {
+                id: 112, name: "Sói lửa (Dhole)", image: "soi-lua.jpg",
+                facts: [
+                    "Sát thủ bầy đàn: Tiến hóa lối săn mồi phối hợp cực kỳ tinh vi, một đàn sói lửa có thể hạ gục con mồi lớn gấp 10 lần chúng.",
+                    "Giao tiếp bằng tiếng huýt: Chúng không tru như sói xám mà dùng tiếng kêu rít đặc biệt giống tiếng huýt sáo để ra lệnh.",
+                    "Chia sẻ thức ăn: Sau khi săn được mồi, chúng nhường cho con non ăn trước, thể hiện tính xã hội rất cao.",
+                    "Không có móng đeo: Khác với chó nhà, chân sau của sói lửa chỉ có 4 ngón và không có móng đeo (ngón thừa).",
+                    "Vận động viên bền bỉ: Chúng có thể đuổi theo con mồi liên tục trong nhiều giờ liền khiến con mồi kiệt sức."
+                ]
+            },
+            {
+                id: 113, name: "Cầy mangut", image: "cay-mangut.jpg",
+                facts: [
+                    "Khắc tinh của rắn: Tiến hóa khả năng kháng lại nọc độc thần kinh của rắn hổ mang và nhiều loài rắn độc khác.",
+                    "Phản xạ thần thánh: Tốc độ né đòn của cầy mangut nhanh đến mức rắn độc tấn công cũng không chạm được vào người nó.",
+                    "Dũng cảm vô song: Dù nhỏ bé nhưng chúng sẵn sàng đối đầu và ăn thịt cả những loài rắn nguy hiểm nhất thế giới.",
+                    "Ăn tạp: Ngoài rắn, chúng còn ăn cả bọ cạp, rết và trứng chim nhờ hàm răng sắc nhọn.",
+                    "Thông minh: Một số loài cầy mangut biết dùng đá để đập vỡ vỏ trứng hoặc vỏ ốc."
+                ]
+            },
+            {
+                id: 114, name: "Lửng mật", image: "lung-mat.jpg",
+                facts: [
+                    "Áo giáp lỏng: Phát triển lớp da rất dày, dai và lỏng lẻo, giúp nó có thể xoay người cắn trả ngay cả khi bị sư tử ngoạm cổ.",
+                    "Bất cần đời: Được sách kỷ lục Guinness ghi nhận là 'loài vật liều lĩnh nhất thế giới', dám tấn công cả báo và trâu rừng.",
+                    "Miễn nhiễm độc tố: Nếu bị rắn độc cắn, lửng mật chỉ bị ngất đi vài tiếng rồi tỉnh dậy và... ăn tiếp con rắn đó.",
+                    "Vũ khí hóa học: Chúng có tuyến hôi ở đuôi có thể xịt ra mùi kinh khủng để xua đuổi kẻ thù lớn.",
+                    "Thông minh ranh mãnh: Biết sử dụng gậy, đá, bùn đất làm công cụ để leo trèo trốn thoát khỏi chuồng nuôi."
+                ]
+            },
+            {
+                id: 115, name: "Chó hoang Châu Phi", image: "cho-hoang-chau-phi.jpg",
+                facts: [
+                    "Tai radar: Tiến hóa đôi tai to tròn ngoại cỡ giúp tản nhiệt cơ thể và nghe ngóng tín hiệu của đồng loại khi săn mồi.",
+                    "Tỷ lệ thành công 80%: Là loài săn mồi hiệu quả nhất châu Phi, vượt xa sư tử (chỉ 30%) nhờ chiến thuật bao vây bền bỉ.",
+                    "Bộ lông nghệ thuật: Tên khoa học của chúng có nghĩa là 'Sói được vẽ', vì mỗi con có hoa văn màu sắc độc nhất vô nhị.",
+                    "Đoàn kết tuyệt đối: Chúng chăm sóc các con chó bị ốm, bị thương và già yếu trong đàn, mớm thức ăn cho nhau.",
+                    "Sống du mục: Chúng không có lãnh thổ cố định mà di chuyển liên tục trên phạm vi rộng lớn để tìm kiếm thức ăn."
+                ]
+            },
+            {
+                id: 116, name: "Gấu túi mũi trần (Wombat)", image: "wombat.jpg",
+                facts: [
+                    "Cái mông thép: Tiến hóa lớp xương sụn cực dày và cứng ở mông, dùng để chặn cửa hang và nghiền nát đầu kẻ thù vào vách hang.",
+                    "Phân hình lập phương: Là loài duy nhất trên thế giới đi vệ sinh ra phân hình vuông vức để đánh dấu lãnh thổ mà không bị lăn đi.",
+                    "Túi quay ngược: Túi đựng con của Wombat quay về phía sau để đất không bị hất vào mặt con khi mẹ đào hang.",
+                    "Máy xúc sinh học: Chân ngắn, móng vuốt khỏe giúp chúng đào hệ thống hang ngầm phức tạp dài hàng chục mét.",
+                    "Tốc độ bất ngờ: Trông ục ịch nhưng khi hoảng sợ, chúng có thể chạy nước rút tới 40km/h."
+                ]
+            },
+            {
+                id: 117, name: "Thú ăn kiến khổng lồ", image: "thu-an-kien.jpg",
+                facts: [
+                    "Lưỡi siêu dài: Răng hoàn toàn biến mất, thay vào đó là chiếc lưỡi dính dài tới 60cm có thể thò ra thụt vào 150 lần/phút.",
+                    "Đi bằng đốt ngón tay: Móng vuốt trước quá lớn và sắc (để phá tổ kiến) nên chúng phải gập chân lại, đi bằng mặt ngoài ngón tay.",
+                    "Đuôi cái chăn: Chiếc đuôi to xù lông giúp chúng giữ thăng bằng và dùng làm chăn đắp lên người khi ngủ.",
+                    "Thân nhiệt thấp: Là loài có thân nhiệt thấp nhất trong các loài thú có vú trên cạn (khoảng 32.7 độ C) để tiết kiệm năng lượng.",
+                    "Không phá hủy hoàn toàn: Chúng không bao giờ ăn hết kiến trong một tổ mà để lại một ít để tổ kiến có thể phục hồi cho lần sau."
+                ]
+            },
+            {
+                id: 118, name: "Chuột lang nước (Capybara)", image: "capybara.jpg",
+                facts: [
+                    "Gặm nhấm khổng lồ: Là loài gặm nhấm lớn nhất thế giới, tiến hóa cơ thể to lớn và các ngón chân có màng để bơi lặn.",
+                    "Ghế sofa của tự nhiên: Tính tình cực kỳ hiền lành, chúng thường để yên cho chim, khỉ và các loài khác ngồi lên lưng mình.",
+                    "Mắt mũi trên đỉnh đầu: Các giác quan nằm ở vị trí cao trên đầu giúp chúng vừa ngâm mình trong nước vừa quan sát được xung quanh.",
+                    "Răng mọc mãi mãi: Răng cửa của chúng mọc dài liên tục suốt đời, nên chúng phải gặm cỏ cứng thường xuyên để mài mòn.",
+                    "Ăn lại 'sản phẩm': Chúng ăn phân mềm của chính mình vào buổi sáng để hấp thụ lại các chất dinh dưỡng chưa tiêu hóa hết."
+                ]
+            },
+            {
+                id: 119, name: "Sóc bay", image: "soc-bay.jpg",
+                facts: [
+                    "Bộ đồ bay: Phát triển lớp màng da nối liền giữa cổ tay và cổ chân, giúp chúng lướt đi trong không khí như một chiếc dù lượn.",
+                    "Không biết bay: Thực chất chúng không bay vỗ cánh như chim, mà chỉ nhảy từ cây cao và lướt xuống cây thấp hơn.",
+                    "Đuôi lái hướng: Chiếc đuôi dẹt và lông xù hoạt động như một cái phanh không khí và bánh lái để điều chỉnh hướng hạ cánh.",
+                    "Mắt to tròn: Đôi mắt rất to giúp chúng thu nhận nhiều ánh sáng để nhìn rõ và hoạt động chủ yếu vào ban đêm.",
+                    "Hạ cánh êm ái: Trước khi chạm đích, chúng dựng người lên để màng da cản gió, giúp giảm tốc độ và bám nhẹ nhàng vào thân cây."
+                ]
+            },
+            {
+                id: 120, name: "Chuột chũi mũi sao", image: "chuot-chui-mui-sao.jpg",
+                facts: [
+                    "Chiếc mũi người ngoài hành tinh: Mũi tiến hóa thành 22 xúc tu nhỏ màu hồng cực nhạy để thay thế hoàn toàn thị giác trong bóng tối.",
+                    "Cảm ứng siêu việt: Mũi của chúng nhạy cảm hơn đầu ngón tay người hàng ngàn lần, có thể phát hiện con mồi trong nháy mắt.",
+                    "Ăn nhanh nhất thế giới: Chúng có thể xác định thức ăn và nuốt chửng chỉ trong vòng 0.2 giây - nhanh nhất trong loài thú.",
+                    "Ngửi dưới nước: Chúng có khả năng thổi bong bóng khí ra và hít lại để đánh hơi mùi của con mồi ngay cả khi đang lặn.",
+                    "Gần như mù: Vì sống cả đời trong các đường hầm dưới lòng đất, mắt của chúng rất nhỏ và thị lực cực kỳ kém."
+                ]
+            }
+        ];
+
+        // --- State ---
+        let currentIndex = 0;
+        let isFlipped = false;
+        let isEndScreen = false;
+
+        // --- DOM Elements ---
+        const contentEl = document.getElementById('card-content');
+        const cardHeader = document.getElementById('card-header');
+        const counterText = document.getElementById('counter-text');
+        const progressBar = document.getElementById('progress-bar');
+        const indicatorEl = document.getElementById('side-indicator');
+        const btnNext = document.getElementById('btn-next');
+
+        // --- Functions ---
+
+        function renderCard() {
+            if (isEndScreen) {
+                renderEndScreen();
+                return;
+            }
+
+            // Reset UI states
+            cardHeader.style.display = 'flex';
+            
+            const currentCard = dataSources[currentIndex];
+            
+            // Cập nhật Thanh tiến trình & Số đếm
+            const progressPercent = ((currentIndex + 1) / dataSources.length) * 100;
+            counterText.textContent = `${currentIndex + 1}/${dataSources.length}`;
+            progressBar.style.width = `${progressPercent}%`;
+
+            
+            if (isFlipped) {
+                indicatorEl.textContent = 'Thông tin';
+                indicatorEl.className = 'px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px] uppercase';
+            } else {
+                indicatorEl.textContent = 'Ảnh';
+                indicatorEl.className = 'px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-[10px] uppercase';
+            }
+
+            // Nút Next logic
+            btnNext.innerHTML = currentIndex === dataSources.length - 1 ? 'Hoàn thành <i data-lucide="check" class="w-5 h-5"></i>' : 'Sau <i data-lucide="chevron-right" class="w-5 h-5"></i>';
+
+            let html = '';
+
+            if (!isFlipped) {
+                // MẶT TRƯỚC:
+                html += `<div class="animate-fade-in w-full flex flex-col">`;
+                
+                // PHẦN ẢNH:
+                html += `
+                    <div class="relative w-full bg-white">
+                         <img 
+                            src="${currentCard.image}" 
+                            alt="${currentCard.name}" 
+                            class="w-full h-auto block"
+                            onerror="this.src='https://placehold.co/600x400/orange/white?text=${encodeURIComponent(currentCard.name)}';"
+                         >
+                    </div>
+                `;
+                
+                // NÚT LẬT:
+                html += `
+                    <div class="w-full flex justify-center py-3 bg-white border-t border-gray-100">
+                        <div class="inline-flex items-center gap-1.5 bg-white border border-orange-200 text-orange-600 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm animate-pulse">
+                            <i data-lucide="rotate-cw" class="w-3 h-3 text-orange-500"></i>
+                            Lật mặt sau để xem 5 sự thật thú vị
+                        </div>
+                    </div>
+                `;
+                html += `</div>`;
+            } else {
+                // MẶT SAU
+                html += `<div class="animate-fade-in w-full h-full flex flex-col px-4 pb-6 py-4">`;
+                
+                html += `<h3 class="flex-none text-xl font-bold text-amber-700 mb-3 uppercase border-b border-amber-200 pb-2 w-full text-center">${currentCard.name}</h3>`;
+                
+                html += `<div class="flex-grow flex flex-col gap-2 w-full">`;
+                
+                currentCard.facts.forEach((fact, index) => {
+                    html += `
+                        <div class="flex items-start gap-3 bg-amber-50 p-3 rounded-lg border border-amber-100 shadow-sm items-center">
+                            <span class="flex-shrink-0 bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shadow-sm">${index + 1}</span>
+                            <span class="text-gray-700 text-sm leading-snug font-medium text-justify">${fact}</span>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`; // End List Container
+                html += `</div>`; // End Main Container
+            }
+
+            contentEl.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function renderEndScreen() {
+            cardHeader.style.display = 'none';
+            btnNext.innerHTML = 'Hết bài';
+
+            let html = `
+                <div class="animate-fade-in flex flex-col items-center justify-center h-full text-center space-y-6 px-4 py-8">
+                    
+                    <div class="bg-gradient-to-br from-yellow-100 to-amber-200 p-6 rounded-full shadow-lg shadow-yellow-200">
+                        <i data-lucide="crown" class="w-20 h-20 text-yellow-600 fill-yellow-600"></i>
+                    </div>
+
+                    <div class="px-2">
+                        <h2 class="text-2xl md:text-3xl font-bold text-amber-700 mb-3">Bé Giỏi Quá!</h2>
+                        <p class="text-gray-600 text-base md:text-lg leading-relaxed">
+                            Chúc mừng <b>"Bé"</b> đã hoàn thành hành trình khám phá ${dataSources.length} loài sinh vật kỳ thú!
+                        </p>
+                    </div>
+                    
+                    <a href="https://catalog.zalo.me/?cid=Cj7DJZwIc0rDhRz0DP6M2ZogmrT3w-GVCQNEIK2Gdc0fjSuv98Jh5G" 
+                       target="_blank"
+                       class="flex items-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-6 py-4 rounded-xl font-bold text-lg shadow-lg shadow-pink-200 transition-all hover:scale-105 transform border-2 border-white ring-2 ring-pink-100 mt-2">
+                        <i data-lucide="gift" class="w-6 h-6"></i>
+                        Xem tốt sản phẩm cho Mẹ & Bé 
+                    </a>
+                    
+                    <button 
+                        onclick="resetApp()"
+                        class="flex items-center gap-2 text-amber-600 hover:text-amber-800 font-semibold text-sm mt-4 bg-amber-50 px-5 py-2 rounded-full transition-colors border border-amber-100">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        Khám phá lại từ đầu
+                    </button>
+                </div>
+            `;
+            contentEl.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function handleCardClick() {
+            if (isEndScreen) return;
+            flipCard();
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            renderCard();
+        }
+
+        function nextCard() {
+            event.stopPropagation();
+            if (isEndScreen) return;
+
+            if (currentIndex < dataSources.length - 1) {
+                currentIndex++;
+                isFlipped = false;
+                renderCard();
+            } else {
+                isEndScreen = true;
+                isFlipped = false;
+                renderCard();
+            }
+        }
+
+        function prevCard() {
+            event.stopPropagation();
+            if (isEndScreen) {
+                isEndScreen = false;
+                currentIndex = dataSources.length - 1;
+                renderCard();
+                return;
+            }
+
+            if (currentIndex > 0) {
+                isFlipped = false;
+                currentIndex--;
+                renderCard();
+            }
+        }
+
+        function resetApp() {
+            event.stopPropagation();
+            currentIndex = 0;
+            isFlipped = false;
+            isEndScreen = false;
+            renderCard();
+        }
+
+        // --- Init ---
+        lucide.createIcons();
+        renderCard();
+
+    </script>
+</body>
+</html>
