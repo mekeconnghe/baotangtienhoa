@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bảo Tàng Tiến Hoá: Thế Giới Đại Dương & Sinh Vật Biển</title>
+    
+    <meta property="og:title" content="Bảo Tàng Tiến Hoá: Đại Dương & Sinh Vật Biển" />
+    <meta property="og:description" content="Bộ thẻ giúp bé khám phá hành trình tiến hoá kỳ diệu ở Đại Dương & Sinh Vật Biển." />
+    <meta property="og:image" content="https://i.pinimg.com/736x/cc/ac/73/ccac737cfcf0d080b29de95eed8aa69b.jpg" />
+    <meta property="og:url" content="https://mekeconnghe.github.io/baotangtienhoa/bosat/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .noselect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .progress-transition {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-amber-50 min-h-screen font-sans text-gray-800 flex flex-col items-center py-4 px-3 md:py-6 md:px-4">
+
+    <div class="text-center mb-4 w-full space-y-2">
+        <h1 class="text-xl md:text-3xl font-bold text-amber-800 flex items-center justify-center gap-2">
+            <i data-lucide="landmark" class="w-6 h-6 md:w-8 md:h-8"></i>
+            Bảo Tàng Tiến Hoá
+        </h1>
+        <div class="text-sm md:text-xl font-semibold text-amber-600 uppercase tracking-widest border-b-2 border-amber-200 inline-block pb-1">
+            Thế Giới Đại Dương & Sinh Vật Biển
+        </div>
+        
+        <div class="pt-1">
+            <a href="https://zalo.me/g/hirmwg741" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-4 py-2 rounded-full text-xs md:text-sm font-bold shadow-md transition-all border-2 border-white ring-2 ring-pink-100">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                Tham Gia Cộng đồng Mẹ Kể Con Nghe
+            </a>
+        </div>
+    </div>
+
+    <div class="w-full max-w-lg perspective-1000 group flex-grow flex flex-col justify-center mb-4">
+        <div 
+            id="flashcard"
+            class="relative w-full bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer transition-all duration-300 transform active:scale-[0.99] border-b-4 border-amber-200 noselect"
+            onclick="handleCardClick()"
+        >
+            <div class="absolute inset-0 flex flex-col h-full relative">
+                
+                <div id="card-header" class="flex-none flex flex-col w-full px-3 pt-2 mb-0 bg-white">
+                    <div class="flex justify-between items-center mb-1">
+                        <div class="flex items-center gap-1 text-gray-400 font-bold text-[10px]">
+                            <i data-lucide="map" class="w-3 h-3 text-orange-400"></i>
+                            <span id="counter-text">1/15</span>
+                        </div>
+                        <span id="side-indicator" class="px-2 py-0.5 rounded bg-amber-50 text-amber-600 font-bold text-[10px] uppercase">
+                            Hình ảnh
+                        </span>
+                    </div>
+                    <div class="w-full h-0.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-orange-400 rounded-full progress-transition" style="width: 5%"></div>
+                    </div>
+                </div>
+
+                <div id="card-content" class="flex-grow flex flex-col items-center justify-center text-center w-full">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full max-w-lg flex gap-3 mb-4">
+        <button 
+            onclick="prevCard()"
+            class="flex-1 flex items-center justify-center gap-2 bg-white hover:bg-gray-50 active:bg-gray-100 text-gray-700 px-4 py-3 rounded-xl shadow-sm border border-gray-200 font-bold text-base md:text-lg transition-colors touch-manipulation"
+        >
+            <i data-lucide="chevron-left" class="w-5 h-5 md:w-6 md:h-6"></i> Trước
+        </button>
+        
+        <button 
+            id="btn-next"
+            onclick="nextCard()"
+            class="flex-1 flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white px-4 py-3 rounded-xl shadow-md shadow-amber-200 font-bold text-base md:text-lg transition-colors touch-manipulation"
+        >
+            Sau <i data-lucide="chevron-right" class="w-5 h-5 md:w-6 md:h-6"></i>
+        </button>
+    </div>
+
+    <script>
+        const dataSources = [
+            {
+                id: 1, name: "Cá mập", image: "ca-map.jpg",
+                facts: [
+                    "Hậu duệ Megalodon: Tiến hóa từ những loài cá mập cổ đại khổng lồ thống trị đại dương hàng triệu năm trước.",
+                    "Bộ xương sụn: Toàn bộ khung xương của chúng làm bằng sụn nhẹ và dẻo, hoàn toàn không có xương cứng.",
+                    "Thay răng vô hạn: Cá mập có nhiều hàng răng và có thể thay tới 30.000 chiếc răng trong suốt cuộc đời.",
+                    "Giác quan thứ 6: Chúng có thể cảm nhận dòng điện cực nhỏ phát ra từ nhịp tim của con mồi đang ẩn nấp.",
+                    "Ngủ khi bơi: Một số loài cá mập phải bơi liên tục ngay cả khi ngủ để nước chảy qua mang giúp chúng hô hấp."
+                ]
+            },
+            {
+                id: 2, name: "Cá phổi", image: "ca-phoi.jpg",
+                facts: [
+                    "Bước đệm lên cạn: Là loài cá đặc biệt có cả mang để thở dưới nước và phổi để hít thở không khí.",
+                    "Ngủ đông trong đất: Khi nước cạn, chúng đào hang dưới bùn, tiết ra kén nhầy bao bọc cơ thể và ngủ tới vài năm.",
+                    "Đi bộ dưới nước: Vây của chúng rất khỏe và linh hoạt, có thể dùng để 'đi bộ' dưới đáy hồ.",
+                    "Hóa thạch sống: Hình dạng của chúng gần như không thay đổi so với tổ tiên cách đây 400 triệu năm.",
+                    "Nhịn ăn kỷ lục: Trong trạng thái ngủ đông, cá phổi có thể sống sót mà không cần ăn uống trong thời gian rất dài."
+                ]
+            },
+            {
+                id: 3, name: "Cá Coelacanth", image: "coelacanth.jpg",
+                facts: [
+                    "Sự trở lại kỳ diệu: Từng bị cho là đã tuyệt chủng cùng khủng long 65 triệu năm trước cho đến khi được tìm thấy lại vào năm 1938.",
+                    "Vây chân thùy: Các vây của nó mọc ra từ một cuống thịt có xương bên trong, giống hệt cấu trúc chân của động vật trên cạn.",
+                    "Sống nơi tăm tối: Chúng sống ở độ sâu lớn trong các hang động núi lửa dưới đáy biển.",
+                    "Cột sống dầu: Thay vì xương sống cứng, chúng có một ống rỗng chứa đầy chất lỏng gọi là dây sống (notochord).",
+                    "Đẻ con: Trứng nở ngay trong bụng mẹ và cá con chui ra ngoài khi đã phát triển đầy đủ."
+                ]
+            },
+            {
+                id: 4, name: "Cá ngựa", image: "ca-ngua.jpg",
+                facts: [
+                    "Ngụy trang bậc thầy: Hình dáng giống hệt rong biển giúp chúng tàng hình trước kẻ săn mồi.",
+                    "Bố mang thai: Đây là loài động vật duy nhất trên thế giới mà con đực chịu trách nhiệm mang thai và sinh con.",
+                    "Chiếc đuôi khỉ: Đuôi cá ngựa có thể cuốn chặt vào san hô hoặc cỏ biển để giữ mình không bị nước cuốn trôi.",
+                    "Ăn không ngừng: Vì không có dạ dày, thức ăn đi qua cơ thể rất nhanh nên chúng phải ăn liên tục để tồn tại.",
+                    "Mắt tắc kè: Hai mắt của cá ngựa có thể di chuyển độc lập, một mắt nhìn trước, một mắt nhìn sau."
+                ]
+            },
+            {
+                id: 5, name: "Cá đuối", image: "ca-duoi.jpg",
+                facts: [
+                    "Cơ thể dẹt: Tiến hóa để sống sát đáy biển, vây ngực phát triển rộng ra như đôi cánh khổng lồ.",
+                    "Miệng dưới bụng: Mắt nằm trên lưng nhưng mồm lại nằm dưới bụng để dễ dàng bắt cua, ốc dưới đáy cát.",
+                    "Họ hàng cá mập: Giống như cá mập, cá đuối cũng có bộ xương làm hoàn toàn bằng sụn.",
+                    "Vũ khí đuôi: Nhiều loài có gai độc sắc nhọn ở đuôi để tự vệ, một số loài còn có thể phóng điện.",
+                    "Bay trong nước: Cách bơi của cá đuối rất uyển chuyển, trông giống như những chú chim đang bay lượn dưới đại dương."
+                ]
+            },
+            {
+                id: 6, name: "Cá kiếm", image: "ca-kiem.jpg",
+                facts: [
+                    "Thanh kiếm tự nhiên: Hàm trên phát triển dài và nhọn như kiếm, dùng để chém choáng con mồi chứ không phải để đâm.",
+                    "Tốc độ kinh hoàng: Là một trong những loài cá bơi nhanh nhất đại dương, có thể đạt tốc độ 100km/h.",
+                    "Mắt sưởi ấm: Cá kiếm có cơ quan sưởi ấm đặc biệt giúp mắt và não hoạt động tốt khi săn mồi ở vùng nước lạnh.",
+                    "Mất răng khi lớn: Cá kiếm con có răng, nhưng khi trưởng thành toàn bộ răng sẽ biến mất.",
+                    "Kích thước khủng: Một con cá kiếm trưởng thành có thể dài tới 4.5 mét và nặng hơn nửa tấn."
+                ]
+            },
+            {
+                id: 7, name: "Cá lồng đèn", image: "ca-long-den.jpg",
+                facts: [
+                    "Cần câu phát sáng: Vây lưng biến đổi thành một cái cần câu có bóng đèn phát sáng để dụ con mồi trong bóng tối.",
+                    "Sống ở vực thẳm: Thích nghi với áp suất cực lớn và bóng tối vĩnh cửu dưới đáy đại dương sâu thẳm.",
+                    "Miệng khổng lồ: Cái miệng rộng toác với hàm răng sắc nhọn giúp chúng nuốt chửng con mồi to hơn cả cơ thể mình.",
+                    "Dạ dày cao su: Dạ dày có khả năng co giãn cực tốt để chứa lượng thức ăn lớn dự trữ.",
+                    "Ký sinh tình yêu: Ở một số loài, cá đực nhỏ bé sẽ cắn vào cá cái và dính liền vĩnh viễn, sống ký sinh trên vợ mình."
+                ]
+            },
+            {
+                id: 8, name: "Cá vàng", image: "ca-vang.jpg",
+                facts: [
+                    "Sản phẩm con người: Không có trong tự nhiên, cá vàng là kết quả chọn giống từ loài cá chép qua hàng ngàn năm.",
+                    "Trí nhớ tốt: Cá vàng không phải chỉ nhớ được 3 giây, chúng có thể nhớ sự việc kéo dài tới 3 tháng.",
+                    "Đổi màu: Nếu sống trong bóng tối quá lâu, cá vàng sẽ mất màu sắc rực rỡ và chuyển sang màu trắng xám.",
+                    "Không có mí mắt: Cá vàng không bao giờ nhắm mắt, ngay cả khi ngủ, vì chúng không có mí mắt.",
+                    "Phàm ăn: Chúng không có cảm giác no rõ ràng và sẽ ăn cho đến khi chết nếu được cho quá nhiều thức ăn."
+                ]
+            },
+            {
+                id: 9, name: "Cá hồi", image: "ca-hoi.jpg",
+                facts: [
+                    "Hành trình vĩ đại: Sinh ra ở suối nước ngọt, bơi ra biển lớn để sống, rồi lại quay về đúng con suối đó để đẻ trứng.",
+                    "Khứu giác siêu phàm: Cá hồi nhớ được mùi hương của dòng nước nơi mình sinh ra để tìm đường về nhà.",
+                    "Biến hình: Khi vào mùa sinh sản, cơ thể chúng đổi màu đỏ rực và hàm dưới của con đực biến dạng cong lên.",
+                    "Vượt thác: Chúng có sức bật phi thường, có thể nhảy ngược dòng nước qua những thác nước cao.",
+                    "Hy sinh: Sau khi đẻ trứng và thụ tinh, hầu hết cá hồi bố mẹ sẽ kiệt sức và chết, xác chúng nuôi dưỡng hệ sinh thái rừng."
+                ]
+            },
+            {
+                id: 10, name: "Cá nóc", image: "ca-noc.jpg",
+                facts: [
+                    "Bơm phồng cơ thể: Khi gặp nguy hiểm, cá nóc hút nước hoặc không khí vào bụng để phồng to lên như quả bóng đầy gai.",
+                    "Độc tố chết người: Nội tạng cá nóc chứa Tetrodotoxin, loại độc tố mạnh gấp 1.200 lần xyanua.",
+                    "Răng mỏ vẹt: Răng của chúng dính liền thành một mảng cứng như mỏ vẹt, đủ sức cắn vỡ vỏ cua, ốc.",
+                    "Nghệ sĩ cát: Một số loài cá nóc đực biết vẽ những vòng tròn tuyệt đẹp trên cát đáy biển để thu hút bạn tình.",
+                    "Nhắm mắt: Cá nóc là loài cá hiếm hoi có thể nhắm và chớp mắt."
+                ]
+            },
+            {
+                id: 11, name: "Cá mặt trăng", image: "ca-mat-trang.jpg",
+                facts: [
+                    "Cá xương nặng nhất: Là loài cá có xương nặng nhất thế giới, có thể đạt tới 2.3 tấn.",
+                    "Hình dáng kỳ dị: Tiến hóa theo hướng tiêu biến phần đuôi, trông như một cái đầu cá khổng lồ biết bơi.",
+                    "Tắm nắng: Chúng thường nằm nghiêng sát mặt nước để sưởi ấm cơ thể và nhờ chim hải âu rỉa ký sinh trùng.",
+                    "Máy đẻ trứng: Một con cá cái có thể đẻ tới 300 triệu quả trứng trong một lần sinh sản.",
+                    "Ăn sứa: Dù to lớn nhưng món ăn khoái khẩu của chúng chủ yếu là các loài sứa mềm."
+                ]
+            },
+            {
+                id: 12, name: "Sao biển", image: "sao-bien.jpg",
+                facts: [
+                    "Không có não: Sao biển không có não và cũng không có máu, chúng dùng nước biển để bơm chất dinh dưỡng đi khắp cơ thể.",
+                    "Tái sinh siêu đẳng: Nếu bị đứt một cánh, sao biển có thể mọc lại cánh mới. Thậm chí một cái cánh cũng có thể mọc thành con mới.",
+                    "Ăn kiểu lạ: Khi ăn, sao biển đẩy dạ dày của mình ra khỏi miệng để tiêu hóa con mồi bên ngoài cơ thể.",
+                    "Chân ống: Dưới các cánh là hàng ngàn chân ống nhỏ xíu giúp chúng bám chặt vào đá và di chuyển.",
+                    "Mắt ở đầu cánh: Tại đầu mút của mỗi cánh đều có một điểm mắt nhỏ giúp chúng cảm nhận ánh sáng."
+                ]
+            },
+            {
+                id: 13, name: "Hải quỳ", image: "hai-quy.jpg",
+                facts: [
+                    "Là động vật: Dù có hình dáng giống một bông hoa rực rỡ, hải quỳ thực chất là động vật ăn thịt.",
+                    "Cộng sinh cá hề: Hải quỳ có xúc tu độc nhưng cá hề có lớp nhớt đặc biệt bảo vệ nên có thể sống an toàn ở giữa.",
+                    "Vũ khí xúc tu: Các xúc tu chứa hàng ngàn tế bào châm (nematocyst) sẵn sàng phóng nọc độc vào kẻ xâm nhập.",
+                    "Bất tử: Hải quỳ không bị lão hóa theo cách thông thường, chúng có thể sống cực lâu nếu môi trường ổn định.",
+                    "Biết đi: Dù thường bám một chỗ, khi bị tấn công, chúng có thể nhổ rễ và trườn hoặc bơi đi nơi khác."
+                ]
+            },
+            {
+                id: 14, name: "Cá vây tay", image: "ca-vay-tay.jpg",
+                facts: [
+                    "Chứng tích tiến hóa: Cấu trúc xương trong vây của chúng tương đồng với xương cánh tay con người (xương cánh tay, xương quay).",
+                    "Di chuyển chéo: Khi bơi, chúng di chuyển vây theo kiểu chéo chi (trước trái - sau phải), giống hệt cách động vật 4 chân đi bộ.",
+                    "Hộp sọ đặc biệt: Hộp sọ của chúng có một khớp nối động giúp miệng mở cực rộng để hút con mồi.",
+                    "Men răng: Răng của cá vây tay được phủ một lớp men cứng, đặc điểm thường thấy ở động vật có xương sống bậc cao.",
+                    "Tổ tiên chung: Nghiên cứu cá vây tay giúp các nhà khoa học hiểu rõ cách tổ tiên loài người đã từ biển lên cạn như thế nào."
+                ]
+            },
+            {
+                id: 15, name: "Nautilus", image: "nautilus.jpg",
+                facts: [
+                    "Hóa thạch sống 500 triệu năm: Loài ốc vòi voi này đã tồn tại từ trước khi loài cá hay khủng long xuất hiện.",
+                    "Tàu ngầm tự nhiên: Vỏ của chúng chia thành nhiều khoang chứa khí, giúp điều chỉnh độ nổi để lặn xuống hoặc nổi lên.",
+                    "Phản lực nước: Di chuyển bằng cách hút nước vào và phun mạnh ra phía sau để đẩy cơ thể đi tới.",
+                    "Mắt không thấu kính: Mắt của Nautilus hoạt động như một chiếc máy ảnh lỗ kim (pinhole camera), không có thấu kính.",
+                    "Nhiều xúc tu: Chúng có tới 90 xúc tu nhỏ nhưng không có giác hút như bạch tuộc hay mực."
+                ]
+            }
+        ];
+
+        // --- State ---
+        let currentIndex = 0;
+        let isFlipped = false;
+        let isEndScreen = false;
+
+        // --- DOM Elements ---
+        const contentEl = document.getElementById('card-content');
+        const cardHeader = document.getElementById('card-header');
+        const counterText = document.getElementById('counter-text');
+        const progressBar = document.getElementById('progress-bar');
+        const indicatorEl = document.getElementById('side-indicator');
+        const btnNext = document.getElementById('btn-next');
+
+        // --- Functions ---
+
+        function renderCard() {
+            if (isEndScreen) {
+                renderEndScreen();
+                return;
+            }
+
+            // Reset UI states
+            cardHeader.style.display = 'flex';
+            
+            const currentCard = dataSources[currentIndex];
+            
+            // Cập nhật Thanh tiến trình & Số đếm
+            const progressPercent = ((currentIndex + 1) / dataSources.length) * 100;
+            counterText.textContent = `${currentIndex + 1}/${dataSources.length}`;
+            progressBar.style.width = `${progressPercent}%`;
+
+            
+            if (isFlipped) {
+                indicatorEl.textContent = 'Thông tin';
+                indicatorEl.className = 'px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px] uppercase';
+            } else {
+                indicatorEl.textContent = 'Ảnh';
+                indicatorEl.className = 'px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-[10px] uppercase';
+            }
+
+            // Nút Next logic
+            btnNext.innerHTML = currentIndex === dataSources.length - 1 ? 'Hoàn thành <i data-lucide="check" class="w-5 h-5"></i>' : 'Sau <i data-lucide="chevron-right" class="w-5 h-5"></i>';
+
+            let html = '';
+
+            if (!isFlipped) {
+                // MẶT TRƯỚC:
+                html += `<div class="animate-fade-in w-full flex flex-col">`;
+                
+                // PHẦN ẢNH:
+                html += `
+                    <div class="relative w-full bg-white">
+                         <img 
+                            src="${currentCard.image}" 
+                            alt="${currentCard.name}" 
+                            class="w-full h-auto block"
+                            onerror="this.src='https://placehold.co/600x400/orange/white?text=${encodeURIComponent(currentCard.name)}';"
+                         >
+                    </div>
+                `;
+                
+                // NÚT LẬT:
+                html += `
+                    <div class="w-full flex justify-center py-3 bg-white border-t border-gray-100">
+                        <div class="inline-flex items-center gap-1.5 bg-white border border-orange-200 text-orange-600 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm animate-pulse">
+                            <i data-lucide="rotate-cw" class="w-3 h-3 text-orange-500"></i>
+                            Lật mặt sau để xem 5 sự thật thú vị
+                        </div>
+                    </div>
+                `;
+                html += `</div>`;
+            } else {
+                // MẶT SAU
+                html += `<div class="animate-fade-in w-full h-full flex flex-col px-4 pb-6 py-4">`;
+                
+                html += `<h3 class="flex-none text-xl font-bold text-amber-700 mb-3 uppercase border-b border-amber-200 pb-2 w-full text-center">${currentCard.name}</h3>`;
+                
+                html += `<div class="flex-grow flex flex-col gap-2 w-full">`;
+                
+                currentCard.facts.forEach((fact, index) => {
+                    html += `
+                        <div class="flex items-start gap-3 bg-amber-50 p-3 rounded-lg border border-amber-100 shadow-sm items-center">
+                            <span class="flex-shrink-0 bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shadow-sm">${index + 1}</span>
+                            <span class="text-gray-700 text-sm leading-snug font-medium text-justify">${fact}</span>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`; // End List Container
+                html += `</div>`; // End Main Container
+            }
+
+            contentEl.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function renderEndScreen() {
+            cardHeader.style.display = 'none';
+            btnNext.innerHTML = 'Hết bài';
+
+            let html = `
+                <div class="animate-fade-in flex flex-col items-center justify-center h-full text-center space-y-6 px-4 py-8">
+                    
+                    <div class="bg-gradient-to-br from-yellow-100 to-amber-200 p-6 rounded-full shadow-lg shadow-yellow-200">
+                        <i data-lucide="crown" class="w-20 h-20 text-yellow-600 fill-yellow-600"></i>
+                    </div>
+
+                    <div class="px-2">
+                        <h2 class="text-2xl md:text-3xl font-bold text-amber-700 mb-3">Bé Giỏi Quá!</h2>
+                        <p class="text-gray-600 text-base md:text-lg leading-relaxed">
+                            Chúc mừng <b>"Bé"</b> đã hoàn thành hành trình khám phá ${dataSources.length} loài sinh vật kỳ thú!
+                        </p>
+                    </div>
+                    
+                    <a href="https://catalog.zalo.me/?cid=Cj7DJZwIc0rDhRz0DP6M2ZogmrT3w-GVCQNEIK2Gdc0fjSuv98Jh5G" 
+                       target="_blank"
+                       class="flex items-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-6 py-4 rounded-xl font-bold text-lg shadow-lg shadow-pink-200 transition-all hover:scale-105 transform border-2 border-white ring-2 ring-pink-100 mt-2">
+                        <i data-lucide="gift" class="w-6 h-6"></i>
+                        Xem tốt sản phẩm cho Mẹ & Bé 
+                    </a>
+                    
+                    <button 
+                        onclick="resetApp()"
+                        class="flex items-center gap-2 text-amber-600 hover:text-amber-800 font-semibold text-sm mt-4 bg-amber-50 px-5 py-2 rounded-full transition-colors border border-amber-100">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        Khám phá lại từ đầu
+                    </button>
+                </div>
+            `;
+            contentEl.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function handleCardClick() {
+            if (isEndScreen) return;
+            flipCard();
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            renderCard();
+        }
+
+        function nextCard() {
+            event.stopPropagation();
+            if (isEndScreen) return;
+
+            if (currentIndex < dataSources.length - 1) {
+                currentIndex++;
+                isFlipped = false;
+                renderCard();
+            } else {
+                isEndScreen = true;
+                isFlipped = false;
+                renderCard();
+            }
+        }
+
+        function prevCard() {
+            event.stopPropagation();
+            if (isEndScreen) {
+                isEndScreen = false;
+                currentIndex = dataSources.length - 1;
+                renderCard();
+                return;
+            }
+
+            if (currentIndex > 0) {
+                isFlipped = false;
+                currentIndex--;
+                renderCard();
+            }
+        }
+
+        function resetApp() {
+            event.stopPropagation();
+            currentIndex = 0;
+            isFlipped = false;
+            isEndScreen = false;
+            renderCard();
+        }
+
+        // --- Init ---
+        lucide.createIcons();
+        renderCard();
+
+    </script>
+</body>
+</html>
