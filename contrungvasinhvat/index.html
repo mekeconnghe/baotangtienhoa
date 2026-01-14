@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bảo Tàng Tiến Hoá: Thế Giới Côn Trùng</title>
+    
+    <meta property="og:title" content="Bộ Thẻ Côn Trùng & Sinh Vật Nhỏ" />
+    <meta property="og:description" content="Bộ thẻ bảo tàng tiến hoá: Khám phá thế giới kỳ diệu của côn trùng và các loài sinh vật nhỏ." />
+    <meta property="og:image" content="https://i.pinimg.com/736x/cf/d8/e0/cfd8e0649c492ffeaab46e948c176f59.jpg" />
+    <meta property="og:url" content="https://mekeconnghe.github.io/baotangtienhoa/contrungvasinhvat/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .noselect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .progress-transition {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-amber-50 min-h-screen font-sans text-gray-800 flex flex-col items-center py-4 px-3 md:py-6 md:px-4">
+
+    <div class="text-center mb-4 w-full space-y-2">
+        <h1 class="text-xl md:text-3xl font-bold text-amber-800 flex items-center justify-center gap-2">
+            <i data-lucide="landmark" class="w-6 h-6 md:w-8 md:h-8"></i>
+            Bảo Tàng Tiến Hoá
+        </h1>
+        <div class="text-sm md:text-xl font-semibold text-amber-600 uppercase tracking-widest border-b-2 border-amber-200 inline-block pb-1">
+            Côn trùng & Sinh vật nhỏ
+        </div>
+        
+        <div class="pt-1">
+            <a href="https://zalo.me/g/hirmwg741" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-4 py-2 rounded-full text-xs md:text-sm font-bold shadow-md transition-all border-2 border-white ring-2 ring-pink-100">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                Tham Gia Cộng đồng Mẹ Kể Con Nghe
+            </a>
+        </div>
+    </div>
+
+    <div class="w-full max-w-lg perspective-1000 group flex-grow flex flex-col justify-center mb-4">
+        <div 
+            id="flashcard"
+            class="relative w-full bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer transition-all duration-300 transform active:scale-[0.99] border-b-4 border-amber-200 noselect"
+            onclick="handleCardClick()"
+        >
+            <div class="absolute inset-0 flex flex-col h-full relative">
+                
+                <div id="card-header" class="flex-none flex flex-col w-full px-3 pt-2 mb-0 bg-white">
+                    <div class="flex justify-between items-center mb-1">
+                        <div class="flex items-center gap-1 text-gray-400 font-bold text-[10px]">
+                            <i data-lucide="map" class="w-3 h-3 text-orange-400"></i>
+                            <span id="counter-text">1/25</span>
+                        </div>
+                        <span id="side-indicator" class="px-2 py-0.5 rounded bg-amber-50 text-amber-600 font-bold text-[10px] uppercase">
+                            Hình ảnh
+                        </span>
+                    </div>
+                    <div class="w-full h-0.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-orange-400 rounded-full progress-transition" style="width: 5%"></div>
+                    </div>
+                </div>
+
+                <div id="card-content" class="flex-grow flex flex-col items-center justify-center text-center w-full">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full max-w-lg flex gap-3 mb-4">
+        <button 
+            onclick="prevCard()"
+            class="flex-1 flex items-center justify-center gap-2 bg-white hover:bg-gray-50 active:bg-gray-100 text-gray-700 px-4 py-3 rounded-xl shadow-sm border border-gray-200 font-bold text-base md:text-lg transition-colors touch-manipulation"
+        >
+            <i data-lucide="chevron-left" class="w-5 h-5 md:w-6 md:h-6"></i> Trước
+        </button>
+        
+        <button 
+            id="btn-next"
+            onclick="nextCard()"
+            class="flex-1 flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white px-4 py-3 rounded-xl shadow-md shadow-amber-200 font-bold text-base md:text-lg transition-colors touch-manipulation"
+        >
+            Sau <i data-lucide="chevron-right" class="w-5 h-5 md:w-6 md:h-6"></i>
+        </button>
+    </div>
+
+    <script>
+        const dataSources = [
+            {
+                id: 176, name: "Bọ lá (Leaf Insect)", image: "bo-la.jpg",
+                facts: [
+                    "Bậc thầy ngụy trang: Ngụy trang hoàn hảo đến mức có cả các đốm nâu giống vết 'răng sâu' hoặc nấm mốc giả trên cơ thể.",
+                    "Điệu nhảy của gió: Khi di chuyển, chúng lắc lư cơ thể qua lại để bắt chước chuyển động của chiếc lá đang bay trong gió.",
+                    "Trứng giống hạt cây: Trứng của bọ lá có hình dạng giống hệt hạt cây, khiến kiến tha về tổ và vô tình bảo vệ chúng.",
+                    "Đổi màu theo môi trường: Chúng có thể thay đổi sắc thái màu xanh hoặc nâu để trùng khớp với màu sắc lá cây xung quanh.",
+                    "Khác biệt giới tính: Con cái thường to lớn và không biết bay, trong khi con đực nhỏ hơn và có thể bay để tìm bạn đời."
+                ]
+            },
+            {
+                id: 177, name: "Bọ que", image: "bo-que.jpg",
+                facts: [
+                    "Cành cây di động: Tiến hóa thân hình dài, gầy và khẳng khiu với các đốt chân y hệt như một cành cây khô.",
+                    "Tái sinh kỳ diệu: Nếu bị kẻ thù tóm mất chân, bọ que có thể tự ngắt bỏ chân đó và mọc lại chân mới sau những lần lột xác.",
+                    "Giả chết: Khi bị đe dọa, chúng sẽ duỗi thẳng chân, thả lỏng cơ thể và rơi xuống đất nằm bất động như một cành củi gãy.",
+                    "Sinh sản đơn tính: Nhiều loài bọ que cái có thể tự đẻ trứng nở ra con mà không cần con đực (Parthenogenesis).",
+                    "Kỷ lục thế giới: Đây là loài côn trùng dài nhất thế giới, có loài dài tới hơn 60cm tính cả chân."
+                ]
+            },
+            {
+                id: 178, name: "Kiến quân đội", image: "kien-quan-doi.jpg",
+                facts: [
+                    "Không nhà cố định: Tiến hóa lối sống du mục, chúng không xây tổ cố định mà hành quân liên tục qua các khu rừng.",
+                    "Cơn lũ càn quét: Đàn kiến di chuyển như một dòng sông, quét sạch và ăn thịt mọi sinh vật trên đường đi của chúng.",
+                    "Cầu sống: Các con kiến thợ sẽ móc chân vào nhau tạo thành những cây cầu sống để cả đàn vượt qua khe nước hoặc hố sâu.",
+                    "Mù lòa: Hầu hết kiến quân đội đều mù, chúng di chuyển và săn mồi hoàn toàn dựa vào tín hiệu hóa học (pheromone).",
+                    "Bảo vệ nữ hoàng: Khi nghỉ ngơi, hàng ngàn con kiến sẽ kết thành một quả cầu sống (bivouac) để bảo vệ kiến chúa ở trung tâm."
+                ]
+            },
+            {
+                id: 179, name: "Kiến thợ dệt", image: "kien-tho-det.jpg",
+                facts: [
+                    "Công cụ sống: Tiến hóa khả năng dùng chính ấu trùng của mình như những 'tuýp keo' sống để nhả tơ.",
+                    "Kỹ sư xây dựng: Một nhóm kiến sẽ kéo mép lá lại gần nhau, trong khi nhóm khác cầm ấu trùng để 'khâu' dính các mép lá lại.",
+                    "Sức mạnh tập thể: Chúng có thể nâng vật nặng gấp 100 lần trọng lượng cơ thể và treo mình thành chuỗi để kéo lá.",
+                    "Vị chua đặc trưng: Kiến thợ dệt có vị chua do axit formic, ở một số nơi người ta dùng chúng làm thực phẩm.",
+                    "Bảo vệ cây trồng: Chúng là thiên địch săn bắt sâu hại rất giỏi, nên thường được nông dân 'thuê' để bảo vệ vườn cây ăn trái."
+                ]
+            },
+            {
+                id: 180, name: "Ong bắp cày ký sinh", image: "ong-bap-cay.jpg",
+                facts: [
+                    "Kẻ xâm nhập: Tiến hóa kim đẻ trứng dài và sắc nhọn để đẻ trứng vào bên trong cơ thể vật chủ (như sâu bướm).",
+                    "Điều khiển tâm trí: Một số loài ong có thể tiêm hóa chất biến vật chủ thành 'zombie' để bảo vệ kén của ong con.",
+                    "Ăn từ bên trong: Ấu trùng ong sẽ nở ra và ăn dần nội tạng của vật chủ nhưng chừa lại các bộ phận quan trọng để vật chủ sống lâu nhất có thể.",
+                    "Định vị siêu đẳng: Chúng có thể đánh hơi thấy mùi của sâu bướm ẩn sâu trong thân cây gỗ dày.",
+                    "Cảm hứng điện ảnh: Chu kỳ sinh sản rùng rợn của loài này chính là cảm hứng cho quái vật trong phim 'Alien'."
+                ]
+            },
+            {
+                id: 181, name: "Muỗi", image: "muoi.jpg",
+                facts: [
+                    "Vũ khí tinh vi: Tiến hóa bộ phận miệng gồm 6 cây kim nhỏ xíu để cưa da, tìm mạch máu và hút máu mà vật chủ không hay biết.",
+                    "Chỉ con cái mới cắn: Muỗi đực chỉ hút mật hoa để sống, chỉ muỗi cái mới cần protein trong máu để nuôi trứng.",
+                    "Radar mùi hương: Chúng có thể phát hiện khí CO2 và mùi mồ hôi của con người từ khoảng cách 30 mét.",
+                    "Thích màu tối: Muỗi thường bị thu hút bởi các màu tối như đen và xanh thẫm hơn là màu sáng.",
+                    "Kẻ giết người số 1: Do truyền nhiều bệnh nguy hiểm, muỗi được coi là loài động vật giết người nhiều nhất hành tinh mỗi năm."
+                ]
+            },
+            {
+                id: 182, name: "Ruồi giấm", image: "ruoi-giam.jpg",
+                facts: [
+                    "Anh hùng khoa học: Là đối tượng nghiên cứu di truyền học quan trọng bậc nhất, giúp con người hiểu về gene và bệnh tật.",
+                    "Vòng đời siêu tốc: Từ trứng đến khi trưởng thành chỉ mất khoảng 10 ngày, giúp các nhà khoa học quan sát nhiều thế hệ nhanh chóng.",
+                    "Gen giống người: Dù nhỏ bé, ruồi giấm chia sẻ khoảng 60% số lượng gen gây bệnh giống với con người.",
+                    "Khứu giác nhạy bén: Chúng có thể ngửi thấy mùi men rượu hoặc trái cây lên men từ rất xa.",
+                    "Phi hành gia: Ruồi giấm là một trong những sinh vật đầu tiên được con người đưa vào vũ trụ để thử nghiệm."
+                ]
+            },
+            {
+                id: 183, name: "Bọ hung (Bọ phân)", image: "bo-hung.jpg",
+                facts: [
+                    "Nhà thiên văn học: Tiến hóa khả năng định vị bằng dải Ngân hà để lăn viên phân theo đường thẳng tắp trong đêm tối.",
+                    "Sức mạnh vô địch: Bọ hung là loài côn trùng khỏe nhất thế giới, có thể kéo vật nặng gấp 1.141 lần cơ thể nó.",
+                    "Máy điều hòa: Chúng thường leo lên viên phân ẩm ướt để làm mát đôi chân khi cát sa mạc quá nóng.",
+                    "Vai trò dọn dẹp: Bọ hung đóng vai trò cực quan trọng trong việc tái chế chất thải và cải tạo đất đai.",
+                    "Tình yêu lãng mạn: Con đực lăn phân để thu hút con cái, viên phân đó sẽ trở thành tổ ấm và thức ăn cho con của chúng."
+                ]
+            },
+            {
+                id: 184, name: "Bọ Hercules", image: "bo-hercules.jpg",
+                facts: [
+                    "Chiếc sừng khổng lồ: Phát triển chiếc sừng dài từ ngực và đầu, trông như một chiếc kìm lớn để kẹp và hất tung đối thủ.",
+                    "Chiến binh tình yêu: Sừng chỉ dùng để chiến đấu giành bạn tình với các con đực khác, không dùng để săn mồi.",
+                    "Biến thái hoàn toàn: Ấu trùng của chúng rất lớn và có thể sống trong gỗ mục tới 2 năm trước khi hóa nhộng.",
+                    "Bộ giáp đổi màu: Lớp vỏ cứng của chúng có thể thay đổi màu sắc tùy thuộc vào độ ẩm của môi trường.",
+                    "Khổng lồ hiền lành: Dù trông rất dữ dằn nhưng chúng hoàn toàn vô hại với con người và chỉ ăn trái cây."
+                ]
+            },
+            {
+                id: 185, name: "Bướm vua (Monarch)", image: "buom-vua.jpg",
+                facts: [
+                    "Cuộc di cư vĩ đại: Tiến hóa khả năng bay hàng ngàn dặm từ Canada xuống Mexico để tránh rét, một kỳ tích của thế giới côn trùng.",
+                    "La bàn mặt trời: Chúng sử dụng vị trí của mặt trời và đồng hồ sinh học trong râu để định hướng đường bay.",
+                    "Thế hệ siêu nhân: Thế hệ bướm di cư sống lâu gấp 8 lần các thế hệ bình thường để đủ sức hoàn thành chuyến đi.",
+                    "Cây độc dược: Sâu bướm ăn lá cây bông tai có độc, khiến cơ thể bướm cũng chứa độc tố để chống lại kẻ săn mồi.",
+                    "Rừng bướm ngủ: Tại Mexico, hàng triệu con bướm đậu kín đặc trên các thân cây linh sam, tạo nên cảnh tượng màu cam rực rỡ."
+                ]
+            },
+            {
+                id: 186, name: "Ngài Luna (Bướm đêm)", image: "ngai-luna.jpg",
+                facts: [
+                    "Đuôi dài đánh lạc hướng: Tiến hóa hai cái đuôi xoắn dài ở cánh sau để làm nhiễu loạn sóng siêu âm định vị của dơi.",
+                    "Không có miệng: Ngài Luna trưởng thành không có miệng và không ăn uống gì, chúng sống chỉ để sinh sản trong khoảng 1 tuần.",
+                    "Vẻ đẹp ma mị: Cánh có màu xanh ngọc bích tuyệt đẹp và các đốm mắt để dọa kẻ thù.",
+                    "Hoạt động về đêm: Đúng như tên gọi 'Luna' (Mặt trăng), loài này chỉ bay lượn khi màn đêm buông xuống.",
+                    "Kén tơ dày: Khi còn là sâu, chúng nhả tơ kết thành kén rất dày xen lẫn lá khô để bảo vệ mình trong mùa đông."
+                ]
+            },
+            {
+                id: 187, name: "Nhện nước", image: "nhen-nuoc.jpg",
+                facts: [
+                    "Đi trên mặt nước: Phát triển các sợi lông siêu nhỏ không thấm nước ở chân để lợi dụng sức căng bề mặt, giúp chúng chạy trên nước.",
+                    "Cảm biến rung động: Chân của chúng cực nhạy, có thể cảm nhận rung động nhỏ xíu của con mồi rơi xuống nước từ xa.",
+                    "Mái chèo tự nhiên: Chân giữa dùng để chèo, chân sau dùng để lái, giúp chúng lướt đi với tốc độ rất nhanh.",
+                    "Không phải nhện: Mặc dù tên là 'Nhện nước' nhưng thực chất chúng là một loài rệp (côn trùng), có 6 chân chứ không phải 8.",
+                    "Bay lượn: Khi ao hồ bị khô cạn, chúng có thể mọc cánh và bay đi tìm vùng nước mới."
+                ]
+            },
+            {
+                id: 188, name: "Nhện nhảy", image: "nhen-nhay.jpg",
+                facts: [
+                    "Mắt thần: Có 4 cặp mắt, trong đó cặp mắt chính to tròn giúp chúng có thị lực màu sắc và chiều sâu cực tốt.",
+                    "Tính toán quỹ đạo: Bộ não nhỏ bé có khả năng tính toán khoảng cách và lực nhảy chính xác để tóm gọn con mồi.",
+                    "Dây an toàn: Trước khi nhảy, chúng luôn nhả ra một sợi tơ dính vào điểm xuất phát để phòng hờ bị trượt chân.",
+                    "Vũ điệu cầu hôn: Con đực thực hiện những điệu nhảy phức tạp và rung động cơ thể để tán tỉnh con cái.",
+                    "Không chăng lưới: Nhện nhảy không giăng tơ bẫy mồi mà chủ động đi săn như mèo."
+                ]
+            },
+            {
+                id: 189, name: "Nhện lạc đà", image: "nhen-lac-da.jpg",
+                facts: [
+                    "Vận động viên điền kinh: Tiến hóa tốc độ chạy cực nhanh trên cát nóng sa mạc (tới 16km/h) để săn mồi.",
+                    "Hàm răng đáng sợ: Tỷ lệ hàm so với cơ thể thuộc hàng lớn nhất giới động vật, có thể nghiền nát bọ cạp và thằn lằn.",
+                    "Không có nọc độc: Dù nhìn rất hung dữ, chúng không có tuyến nọc độc mà giết mồi bằng lực cắn thuần túy.",
+                    "Trốn nắng: Chúng thường chạy theo bóng râm của người hoặc lạc đà để tránh nắng, khiến người ta lầm tưởng chúng đang rượt đuổi.",
+                    "Tiếng kêu ken két: Khi bị đe dọa, chúng cọ hai hàm răng vào nhau tạo ra tiếng rít để cảnh báo."
+                ]
+            },
+            {
+                id: 190, name: "Bọ vòi voi", image: "bo-voi-voi.jpg",
+                facts: [
+                    "Chiếc vòi khoan: Phát triển chiếc vòi dài (thực chất là phần đầu kéo dài) dùng để khoan lỗ sâu vào hạt hoặc trái cây cứng.",
+                    "Đẻ trứng trong hạt: Con cái dùng vòi khoan lỗ, sau đó đẻ trứng vào trong hạt để ấu trùng có thức ăn ngay khi nở.",
+                    "Giả chết tài tình: Khi gặp nguy hiểm, chúng co chân ép sát vào mình và rơi tự do xuống đất, nằm im lìm.",
+                    "Đa dạng loài: Đây là một trong những họ động vật đông đúc nhất hành tinh với hàng chục ngàn loài khác nhau.",
+                    "Kẻ phá hoại: Nhiều loài bọ vòi voi là nỗi khiếp sợ của nông dân vì chúng phá hoại kho lương thực và mùa màng."
+                ]
+            },
+            {
+                id: 191, name: "Bọ xít", image: "bo-xit.jpg",
+                facts: [
+                    "Vũ khí hóa học: Tiến hóa tuyến hôi dưới bụng chứa hóa chất cực mạnh để xịt vào kẻ thù khi bị đe dọa.",
+                    "Mùi khó phai: Mùi hôi của bọ xít rất nồng, khó rửa sạch và có thể gây kích ứng da hoặc mắt.",
+                    "Ống hút nhựa cây: Miệng chúng cấu tạo như cái kim tiêm để chọc vào thân cây và hút nhựa sống.",
+                    "Chăm sóc con: Một số loài bọ xít mẹ sẽ đứng canh trứng và bảo vệ đàn con mới nở khỏi kẻ săn mồi.",
+                    "Âm thanh liên lạc: Chúng có thể giao tiếp với nhau bằng cách rung bụng tạo ra sóng rung động truyền qua cành cây."
+                ]
+            },
+            {
+                id: 192, name: "Ve sầu 17 năm", image: "ve-sau.jpg",
+                facts: [
+                    "Kiên nhẫn vô biên: Ấu trùng sống trong lòng đất, hút nhựa rễ cây suốt 13 hoặc 17 năm mới chui lên lột xác.",
+                    "Tránh kẻ thù: Chu kỳ sống theo số nguyên tố (13, 17) giúp chúng tránh trùng lặp với chu kỳ bùng nổ của các loài săn mồi.",
+                    "Dàn đồng ca: Hàng triệu con ve cùng xuất hiện và kêu vang để tìm bạn tình, tiếng ồn có thể lớn như tiếng máy bay phản lực.",
+                    "Không có miệng ăn: Ve sầu trưởng thành chỉ sống vài tuần để sinh sản, chúng gần như không ăn uống gì nhiều.",
+                    "Lột xác đồng loạt: Việc xuất hiện cùng lúc với số lượng khổng lồ là chiến thuật 'biển ve' để kẻ săn mồi ăn không xuể."
+                ]
+            },
+            {
+                id: 193, name: "Bọ rùa (Cánh cam)", image: "bo-rua.jpg",
+                facts: [
+                    "Tín hiệu cảnh báo: Màu đỏ hoặc cam rực rỡ là thông điệp tiến hóa gửi đến kẻ thù: 'Đừng ăn tôi, tôi có độc và vị rất tệ!'.",
+                    "Chảy máu phản vệ: Khi bị tấn công, chúng tiết ra chất dịch màu vàng có mùi hôi và vị đắng từ khớp chân.",
+                    "Bạn của nhà nông: Bọ rùa là loài phàm ăn, chúng tiêu diệt hàng ngàn con rệp vừng gây hại cho cây trồng.",
+                    "Ngủ đông tập thể: Vào mùa đông, chúng tụ tập thành đàn lớn hàng ngàn con chen chúc nhau trong hốc cây để giữ ấm.",
+                    "Đốm trên lưng: Số lượng đốm đen trên lưng giúp phân biệt các loài bọ rùa khác nhau, không phải để chỉ tuổi của chúng."
+                ]
+            },
+            {
+                id: 194, name: "Rệp cây (Aphid)", image: "rep-cay.jpg",
+                facts: [
+                    "Nhân bản vô tính: Con cái có khả năng tự sinh sản mà không cần con đực, đẻ ra con con (đã mang thai sẵn) thay vì trứng.",
+                    "Bùng nổ dân số: Nhờ sinh sản siêu tốc, một con rệp có thể tạo ra cả một đại gia đình hàng triệu con trong một mùa.",
+                    "Quan hệ với kiến: Rệp tiết ra dịch ngọt (mật) cho kiến ăn, đổi lại kiến sẽ bảo vệ rệp như 'bò sữa' của chúng.",
+                    "Hút nhựa cây: Chúng dùng vòi chọc vào mạch rây của cây để hút nhựa, làm cây còi cọc và truyền bệnh virus.",
+                    "Ống xả khí: Hai cái ống nhỏ phía sau bụng dùng để tiết ra sáp hoặc pheromone báo động cho đồng loại."
+                ]
+            },
+            {
+                id: 195, name: "Bọ nước khổng lồ", image: "bo-nuoc-khong-lo.jpg",
+                facts: [
+                    "Kẻ săn mồi đầm lầy: Tiến hóa cặp chân trước to khỏe như gọng kìm để tóm chặt con mồi, săn cả cá con, nòng nọc và rùa nhỏ.",
+                    "Vết cắn đau điếng: Được mệnh danh là 'Kẻ cắn ngón chân', vết cắn của chúng chứa enzyme tiêu hóa gây đau đớn dữ dội.",
+                    "Ông bố vĩ đại: Ở nhiều loài, con cái đẻ trứng lên lưng con đực, và con đực sẽ cõng trứng, bảo vệ cho đến khi nở.",
+                    "Giả chết dưới nước: Khi gặp nguy hiểm, chúng thả lỏng trôi lờ đờ trên mặt nước trông như lá mục.",
+                    "Thu hút bởi ánh sáng: Ban đêm, chúng thường bay ra khỏi mặt nước và lao vào các cột đèn đường sáng trưng."
+                ]
+            },
+            {
+                id: 196, name: "Nhện túi nước (Diving Bell)", image: "nhen-tui-nuoc.jpg",
+                facts: [
+                    "Thợ lặn tài ba: Là loài nhện duy nhất trên thế giới tiến hóa để sống và sinh sản hoàn toàn dưới mặt nước.",
+                    "Chuông lặn: Chúng dệt một cái túi tơ hình chuông dưới nước, sau đó ngoi lên mặt nước lấy không khí mang xuống bơm vào túi.",
+                    "Bình dưỡng khí: Lông trên bụng nhện giữ lại một lớp bong bóng khí bao quanh cơ thể, giúp nó hô hấp khi bơi.",
+                    "Sống trong bong bóng: Chúng ăn, ngủ, lột xác và đẻ trứng ngay bên trong cái 'chuông khí' tự tạo này.",
+                    "Nọc độc mạnh: Vì sống trong môi trường nước khó di chuyển nhanh, nọc độc của chúng khá mạnh để hạ gục con mồi ngay lập tức."
+                ]
+            },
+            {
+                id: 197, name: "Bọ cạp đuôi roi", image: "bo-cap-duoi-roi.jpg",
+                facts: [
+                    "Súng phun axit: Tiến hóa khả năng bắn ra tia dung dịch chứa axit acetic (thành phần chính của giấm) từ đuôi để tự vệ.",
+                    "Mùi chua nồng: Khi bắn axit, chúng tạo ra mùi giấm nồng nặc khiến kẻ thù cay mắt và mũi, nên còn gọi là 'Bọ giấm'.",
+                    "Không có ngòi độc: Khác bọ cạp thường, đuôi của chúng chỉ là một sợi roi cảm giác dài, hoàn toàn không có nọc độc.",
+                    "Càng kẹp khỏe: Chúng dùng đôi càng to khỏe đầy gai nhọn để nghiền nát con mồi là các loài côn trùng khác.",
+                    "Mẹ hiền: Bọ cạp mẹ sẽ cõng đàn con trên lưng suốt nhiều tuần đầu đời cho đến khi chúng đủ cứng cáp."
+                ]
+            },
+            {
+                id: 198, name: "Mọt gỗ", image: "mot-go.jpg",
+                facts: [
+                    "Tiêu hóa gỗ: Tiến hóa hệ vi sinh vật hoặc enzyme đặc biệt trong ruột giúp chúng tiêu hóa được cellulose cứng trong gỗ.",
+                    "Tiếng gõ tử thần: Một số loài mọt tạo ra tiếng 'tích tắc' trong gỗ khi gọi bạn tình, xưa kia bị coi là điềm báo xui xẻo.",
+                    "Kẻ phá nhà: Ấu trùng mọt có thể âm thầm đục khoét bên trong các cây cột nhà suốt nhiều năm trước khi bị phát hiện.",
+                    "Đầu cứng như thép: Phần đầu và hàm của ấu trùng rất cứng, cho phép chúng nhai nát cả những loại gỗ lim rắn chắc nhất.",
+                    "Cảm biến rung: Chúng rất nhạy cảm với rung động, chỉ cần gõ nhẹ vào gỗ là chúng sẽ ngừng ăn và nằm im thin thít."
+                ]
+            },
+            {
+                id: 199, name: "Bọ trĩ", image: "bo-tri.jpg",
+                facts: [
+                    "Tí hon có cánh: Là những loài côn trùng nhỏ bé nhất, nhưng cánh của chúng có cấu tạo dạng lông tơ dài độc đáo.",
+                    "Bay nhờ gió: Do quá nhỏ và cánh yếu, chúng chủ yếu nương theo các luồng gió để phát tán đi xa hàng trăm dặm.",
+                    "Kẻ hút nhựa: Chúng có miệng kiểu dũa-hút, cào rách bề mặt lá và hoa rồi hút nhựa cây chảy ra.",
+                    "Làm xoăn lá: Khi bị bọ trĩ tấn công, lá cây thường bị quăn queo, biến dạng khiến cây không lớn được.",
+                    "Kháng thuốc: Bọ trĩ sinh sản nhanh và rất dễ nhờn thuốc trừ sâu, là nỗi đau đầu của người trồng hoa hồng."
+                ]
+            },
+            {
+                id: 200, name: "Gấu nước (Tardigrade)", image: "gau-nuoc.jpg",
+                facts: [
+                    "Sinh vật bất tử: Loài vi sinh vật này tiến hóa khả năng sống sót trong chân không vũ trụ, phóng xạ và áp suất đáy biển sâu.",
+                    "Ngủ đông khô: Khi gặp môi trường khắc nghiệt, chúng co rút lại, thải hết nước và biến thành trạng thái 'tun' khô khốc như chết.",
+                    "Sống lại nhờ nước: Chỉ cần một giọt nước, gấu nước ở trạng thái khô có thể 'hồi sinh' và hoạt động trở lại sau hàng chục năm.",
+                    "Gấu 8 chân: Dù siêu nhỏ (chỉ nhìn thấy qua kính hiển vi), chúng có hình dáng mũm mĩm như con gấu với 8 cái chân có móng vuốt.",
+                    "Có mặt khắp nơi: Từ rêu trên mái nhà, miệng núi lửa cho đến băng tuyết Nam Cực, đâu đâu cũng có gấu nước sinh sống."
+                ]
+            }
+        ];
+
+        // --- State ---
+        let currentIndex = 0;
+        let isFlipped = false;
+        let isEndScreen = false;
+
+        // --- DOM Elements ---
+        const contentEl = document.getElementById('card-content');
+        const cardHeader = document.getElementById('card-header');
+        const counterText = document.getElementById('counter-text');
+        const progressBar = document.getElementById('progress-bar');
+        const indicatorEl = document.getElementById('side-indicator');
+        const btnNext = document.getElementById('btn-next');
+
+        // --- Functions ---
+
+        function renderCard() {
+            if (isEndScreen) {
+                renderEndScreen();
+                return;
+            }
+
+            // Reset UI states
+            cardHeader.style.display = 'flex';
+            
+            const currentCard = dataSources[currentIndex];
+            
+            // Cập nhật Thanh tiến trình & Số đếm
+            const progressPercent = ((currentIndex + 1) / dataSources.length) * 100;
+            counterText.textContent = `${currentIndex + 1}/${dataSources.length}`;
+            progressBar.style.width = `${progressPercent}%`;
+
+            
+            if (isFlipped) {
+                indicatorEl.textContent = 'Thông tin';
+                indicatorEl.className = 'px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px] uppercase';
+            } else {
+                indicatorEl.textContent = 'Ảnh';
+                indicatorEl.className = 'px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-[10px] uppercase';
+            }
+
+            // Nút Next logic
+            btnNext.innerHTML = currentIndex === dataSources.length - 1 ? 'Hoàn thành <i data-lucide="check" class="w-5 h-5"></i>' : 'Sau <i data-lucide="chevron-right" class="w-5 h-5"></i>';
+
+            let html = '';
+
+            if (!isFlipped) {
+                // MẶT TRƯỚC:
+                html += `<div class="animate-fade-in w-full flex flex-col">`;
+                
+                // PHẦN ẢNH:
+                html += `
+                    <div class="relative w-full bg-white">
+                         <img 
+                            src="${currentCard.image}" 
+                            alt="${currentCard.name}" 
+                            class="w-full h-auto block"
+                            onerror="this.src='https://placehold.co/600x400/orange/white?text=${encodeURIComponent(currentCard.name)}';"
+                         >
+                    </div>
+                `;
+                
+                // NÚT LẬT:
+                html += `
+                    <div class="w-full flex justify-center py-3 bg-white border-t border-gray-100">
+                        <div class="inline-flex items-center gap-1.5 bg-white border border-orange-200 text-orange-600 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm animate-pulse">
+                            <i data-lucide="rotate-cw" class="w-3 h-3 text-orange-500"></i>
+                            Lật mặt sau để xem 5 sự thật thú vị
+                        </div>
+                    </div>
+                `;
+                html += `</div>`;
+            } else {
+                // MẶT SAU
+                html += `<div class="animate-fade-in w-full h-full flex flex-col px-4 pb-6 py-4">`;
+                
+                html += `<h3 class="flex-none text-xl font-bold text-amber-700 mb-3 uppercase border-b border-amber-200 pb-2 w-full text-center">${currentCard.name}</h3>`;
+                
+                html += `<div class="flex-grow flex flex-col gap-2 w-full">`;
+                
+                currentCard.facts.forEach((fact, index) => {
+                    html += `
+                        <div class="flex items-start gap-3 bg-amber-50 p-3 rounded-lg border border-amber-100 shadow-sm items-center">
+                            <span class="flex-shrink-0 bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shadow-sm">${index + 1}</span>
+                            <span class="text-gray-700 text-sm leading-snug font-medium text-justify">${fact}</span>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`; // End List Container
+                html += `</div>`; // End Main Container
+            }
+
+            contentEl.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function renderEndScreen() {
+            cardHeader.style.display = 'none';
+            btnNext.innerHTML = 'Hết bài';
+
+            let html = `
+                <div class="animate-fade-in flex flex-col items-center justify-center h-full text-center space-y-6 px-4 py-8">
+                    
+                    <div class="bg-gradient-to-br from-yellow-100 to-amber-200 p-6 rounded-full shadow-lg shadow-yellow-200">
+                        <i data-lucide="crown" class="w-20 h-20 text-yellow-600 fill-yellow-600"></i>
+                    </div>
+
+                    <div class="px-2">
+                        <h2 class="text-2xl md:text-3xl font-bold text-amber-700 mb-3">Bé Giỏi Quá!</h2>
+                        <p class="text-gray-600 text-base md:text-lg leading-relaxed">
+                            Chúc mừng <b>"Bé"</b> đã hoàn thành hành trình khám phá ${dataSources.length} Côn trùng & Sinh vật nhỏ!
+                        </p>
+                    </div>
+                    
+                    <a href="https://catalog.zalo.me/?cid=Cj7DJZwIc0rDhRz0DP6M2ZogmrT3w-GVCQNEIK2Gdc0fjSuv98Jh5G" 
+                       target="_blank"
+                       class="flex items-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-6 py-4 rounded-xl font-bold text-lg shadow-lg shadow-pink-200 transition-all hover:scale-105 transform border-2 border-white ring-2 ring-pink-100 mt-2">
+                        <i data-lucide="gift" class="w-6 h-6"></i>
+                        Xem tốt sản phẩm cho Mẹ & Bé 
+                    </a>
+                    
+                    <button 
+                        onclick="resetApp()"
+                        class="flex items-center gap-2 text-amber-600 hover:text-amber-800 font-semibold text-sm mt-4 bg-amber-50 px-5 py-2 rounded-full transition-colors border border-amber-100">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        Khám phá lại từ đầu
+                    </button>
+                </div>
+            `;
+            contentEl.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function handleCardClick() {
+            if (isEndScreen) return;
+            flipCard();
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            renderCard();
+        }
+
+        function nextCard() {
+            event.stopPropagation();
+            if (isEndScreen) return;
+
+            if (currentIndex < dataSources.length - 1) {
+                currentIndex++;
+                isFlipped = false;
+                renderCard();
+            } else {
+                isEndScreen = true;
+                isFlipped = false;
+                renderCard();
+            }
+        }
+
+        function prevCard() {
+            event.stopPropagation();
+            if (isEndScreen) {
+                isEndScreen = false;
+                currentIndex = dataSources.length - 1;
+                renderCard();
+                return;
+            }
+
+            if (currentIndex > 0) {
+                isFlipped = false;
+                currentIndex--;
+                renderCard();
+            }
+        }
+
+        function resetApp() {
+            event.stopPropagation();
+            currentIndex = 0;
+            isFlipped = false;
+            isEndScreen = false;
+            renderCard();
+        }
+
+        // --- Init ---
+        lucide.createIcons();
+        renderCard();
+
+    </script>
+</body>
+</html>
